@@ -2,10 +2,10 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Palkkalaskuri 2026</title>
     <style>
-        /* --- 1. MUUTTUJAT --- */
+        /* --- TYYLIT --- */
         :root {
             --sivun-tausta: #f2f2f7; --kortin-tausta: #ffffff; --nappi-vari: #1c497b; --nappi-teksti: #ffffff;
             --summa-vari: #151515; --tuntipalkka-vari: #151515; --teksti-paa: #151515; --teksti-haalea: #8e8e93;
@@ -15,15 +15,35 @@
         }
 
         * { box-sizing: border-box; }
-        body { background-color: var(--sivun-tausta); font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; padding: 20px; color: var(--teksti-paa); }
+        
+        /* TÄRKEÄ MUUTOS: Poistetaan sivun omat marginaalit, jotta se istuu iframeen */
+        body { 
+            background-color: transparent; /* Läpinäkyvä tausta, jotta JotFormin väri näkyy */
+            font-family: -apple-system, system-ui, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            padding: 0; 
+            margin: 0;
+            color: var(--teksti-paa); 
+            width: 100%;
+        }
         
         input[type="radio"] { display: none !important; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; outline: none; }
         select { appearance: none; -webkit-appearance: none; }
 
-        .app-card { background: var(--kortin-tausta); width: 440px; min-width: 440px; border-radius: 20px; padding: 32px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); }
-        header { text-align: center; margin-bottom: 30px; }
+        /* KORTIN TYYLI: Nyt 100% leveys eikä kiinteä 440px */
+        .app-card { 
+            background: var(--kortin-tausta); 
+            width: 100%; 
+            max-width: 600px; /* Ei levähdä liikaa isolla ruudulla */
+            border-radius: 0; /* Suorat reunat mobiilissa */
+            padding: 20px; 
+            box-shadow: none; /* Ei varjoa upotuksessa */
+        }
+
+        header { text-align: center; margin-bottom: 25px; }
         .input-group { margin-bottom: 20px; }
         .main-row-layout, .input-row { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; width: 100%; }
 
@@ -32,7 +52,7 @@
         .field:nth-child(3) { width: 29% !important; flex: none !important; }
         .input-row .input-wrapper { width: 50% !important; }
 
-        label { display: block; margin-bottom: 8px; font-size: 11px !important; font-weight: 700; color: var(--teksti-paa); text-transform: uppercase; letter-spacing: 0.5px; }
+        label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; color: var(--teksti-paa); text-transform: uppercase; letter-spacing: 0.5px; }
 
         .input-wrapper { position: relative; display: block; height: 48px; }
         input, select { width: 100%; height: 48px !important; padding: 0 10px; border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 14px; background: var(--kentta-tausta); color: var(--teksti-paa); }
@@ -72,18 +92,16 @@
         .footer-logo { max-width: 140px; height: auto; display: block; margin: 0 auto; }
 
         @media (max-width: 480px) {
-            .app-card { width: 100%; min-width: 100%; padding: 20px; }
+            .app-card { width: 100%; min-width: 100%; padding: 10px; } /* Vähemmän paddingia mobiilissa */
             .main-row-layout { flex-wrap: wrap !important; gap: 8px !important; }
             .field.flex-grow { width: 100% !important; margin-bottom: 4px; }
             .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; flex: none !important; }
         }
-        @media print { #print-btn, .segmented-control, .add-btn, .del-btn, .footer-logo-container { display: none !important; } .app-card { box-shadow: none; border: none; } }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-  <div class="app-card">
+<div class="app-card">
     <header>
       <h1 class="main-title" style="margin-bottom: 10px;">Palkkalaskuri 2026</h1>
       <p style="font-size: 13px; color: var(--teksti-haalea); margin-bottom: 20px;">Lentoliikenteen palveluja koskeva työehtosopimus</p>
@@ -92,9 +110,9 @@
         <input type="radio" name="mode" id="mode-tes" value="tes" checked onchange="paivitaNakyvyys()">
         <label for="mode-tes">Taulukkopalkat</label>
         <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
-        <label for="mode-man">Arviolaskuri</label>
+        <label for="mode-man">Arvio</label>
         <input type="radio" name="mode" id="mode-kta" value="kta" onchange="paivitaNakyvyys()">
-        <label for="mode-kta">KTA-laskuri</label>
+        <label for="mode-kta">KTA</label>
         <div class="selection-slider"></div>
       </div>
     </header>
@@ -183,7 +201,6 @@
         <img src="ajastamo_25-logo_pieni.webp" alt="Ajastamo Logo" class="footer-logo">
       </div>
     </footer>
-  </div>
 </div>
 
 <script>
@@ -246,17 +263,15 @@
       const jakaja = ala === "tekninen" ? 161 : 158, perus = taulukot[ala][ryhma] || 0;
       let kP = ala === "tekninen" ? (kokemus >= 25 ? 0.19 : kokemus >= 10 ? 0.15 : kokemus >= 4 ? 0.05 : 0) : (kokemus >= 10 ? 0.15 : kokemus >= 6 ? 0.09 : kokemus >= 2 ? 0.03 : 0);
       
-      /* --- HEKO KIRJAIMET & LASKENTA --- */
-      const hA_val = document.getElementById("heko_a").value; // Esim "B"
-      const hT_val = document.getElementById("heko_t").value; // Esim "C"
+      /* --- HEKO KIRJAIMET --- */
+      const hA_val = document.getElementById("heko_a").value; 
+      const hT_val = document.getElementById("heko_t").value;
       const hMap = { A: 0, B: 0.03, C: 0.06, D: 0.09, E: 0.12 };
       const hP = hMap[hA_val] + hMap[hT_val];
       
       const eK = perus * kP, eH = perus * hP, kk = perus + eK + eH, tunti = kk / jakaja;
       let erittely = `<div class="breakdown-header">Palkan muodostus</div><div class="breakdown-line"><span>Taulukkopalkka</span><span>${perus.toFixed(2)}€</span></div>`;
       if (eK > 0) erittely += `<div class="breakdown-line"><span>Kokemuslisä (${(kP*100).toFixed(0)}%)</span><span>${eK.toFixed(2)}€</span></div>`;
-      
-      // NÄYTETÄÄN KIRJAIMET KOOSTEESSA:
       if (eH > 0) erittely += `<div class="breakdown-line"><span>HEKO-kirjaimet: ${hA_val}${hT_val} (${(hP*100).toFixed(0)}%)</span><span>${eH.toFixed(2)}€</span></div>`;
       
       erittely += `<div class="breakdown-header" style="margin-top:12px;">Suoritepalkkaus</div>`;
