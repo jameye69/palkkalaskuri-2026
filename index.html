@@ -21,7 +21,11 @@
         select { appearance: none; -webkit-appearance: none; }
 
         .app-card { background: var(--kortin-tausta); width: 100%; max-width: 480px; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin: 0 auto; }
+        
+        /* HEADER TYYLIT */
         header { text-align: center; margin-bottom: 25px; }
+        h1 { font-size: 24px; margin: 0 0 8px 0; text-align: center; color: var(--teksti-paa); }
+        .subtitle { font-size: 13px; color: var(--teksti-haalea); margin: 0 0 20px 0; text-align: center; display: block; }
 
         .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin: 15px 0; min-height: 54px; }
         .segmented-control label { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px; font-size: 11px; font-weight: 700; color: var(--kytkin-teksti); cursor: pointer; z-index: 1; position: relative; line-height: 1.1; white-space: normal; transition: color 0.2s; }
@@ -62,32 +66,27 @@
         .del-btn { width: 40px; height: 48px; background: #fff0f0; border: 1px solid #d1d1d6; color: #d32f2f; border-radius: 10px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; flex: none; }
         .print-btn { width: 100%; margin-top: 20px; padding: 16px; background-color: var(--nappi-vari); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
-        /* MUUTETUT KOHDAT: Lisätty ilmaa ja pienennetty logoa */
+        /* LOGO TYYLIT */
         .footer-logo-container { text-align: center; margin-top: 45px; opacity: 0.85; }
         .footer-logo { max-width: 100px; height: auto; margin: 0 auto; display: block; }
 
         @media (max-width: 480px) { .app-card { padding: 16px; } .main-row-layout { flex-wrap: wrap !important; } .field.flex-grow { width: 100% !important; } .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; } }
-</style>
+    </style>
 </head>
 <body>
 
-<header>
-      <h1 style="font-size: 24px; margin-bottom: 8px; text-align: center;">Palkkalaskuri 2026</h1>
-      
-      <p style="font-size: 14px; color: var(--teksti-haalea); margin-bottom: 20px; text-align: center;">
-        Lentoliikenteen palveluja koskeva työehtosopimus
-      </p>
+<div class="app-card">
+    <header>
+      <h1>Palkkalaskuri 2026</h1>
+      <span class="subtitle">Lentoliikenteen palveluja koskeva työehtosopimus</span>
       
       <div class="segmented-control">
         <input type="radio" name="mode" id="mode-tes" value="tes" checked onchange="paivitaNakyvyys()">
         <label for="mode-tes">Taulukko-<br>palkat</label>
-        
         <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
         <label for="mode-man">Arvio-<br>laskuri</label>
-        
         <input type="radio" name="mode" id="mode-kta" value="kta" onchange="paivitaNakyvyys()">
         <label for="mode-kta">KTA-<br>laskuri</label>
-        
         <div class="selection-slider"></div>
       </div>
     </header>
@@ -207,7 +206,6 @@
         
         rSel.innerHTML = ""; kSel.innerHTML = "";
         
-        // PÄIVITETTY LOGIIKKA UUSILLA NIMILLÄ (maapalvelut / tekniikka)
         const r = ala === "maapalvelut" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10,11];
         r.forEach(v => rSel.add(new Option(v, v)));
         if (r.includes(parseInt(valittuRyhma))) rSel.value = valittuRyhma;
@@ -245,7 +243,6 @@
         const ryh = parseInt(document.getElementById("ryhma").value) || 4;
         const kok = parseInt(document.getElementById("kokemus").value) || 0;
         
-        // PÄIVITETTY OBJEKTI UUSILLA AVAIMILLA
         const taul = {
             maapalvelut: {4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3},
             tekniikka: {1:1911.05,2:1989.02,3:2076.29,4:2182.2,5:2303.24,6:2432.42,7:2582.54,8:2734.99,9:2895.6,10:3069.0,11:3253.16}
@@ -254,7 +251,6 @@
         const perus = taul[ala] ? (taul[ala][ryh] || 0) : 0;
         
         let kP = 0;
-        // PÄIVITETTY TARKISTUS
         if (ala === "maapalvelut") {
             if (kok >= 10) kP = 0.15;
             else if (kok >= 8) kP = 0.12;
@@ -279,7 +275,6 @@
         const kokLisaEuro = perus * kP;
         const hekoEuro = perus * hP;
         const kk = perus + kokLisaEuro + hekoEuro;
-        // PÄIVITETTY TARKISTUS
         const jakaja = ala === "maapalvelut" ? 158 : 161;
         const tunti = kk / jakaja;
         
@@ -289,7 +284,6 @@
         const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
 
         if(mode === "tes") {
-            // PÄIVITETTY TARKISTUS
             const ilt = getVal("ilt") * (ala === "maapalvelut" ? 3.06 : 3.10);
             const yo = getVal("yo") * (ala === "maapalvelut" ? 5.11 : 5.17);
             const lau = getVal("lau") * tunti * 0.5;
@@ -349,5 +343,3 @@
 </body>
 </html>
 ``` [cite: 2026-01-09]
-
-
