@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Palkkalaskuri 2026</title>
-    <style>
+   <style>
         /* --- TYYLIT --- */
         :root {
             --sivun-tausta: #f2f2f7; --kortin-tausta: #ffffff; --nappi-vari: #1c497b; --nappi-teksti: #ffffff;
@@ -16,87 +16,46 @@
 
         * { box-sizing: border-box; }
         
-        /* TÄRKEÄ MUUTOS: Poistetaan sivun omat marginaalit, jotta se istuu iframeen */
+        /* TÄRKEÄÄ: Poistetaan sivun omat marginaalit kokonaan */
         body { 
-            background-color: transparent; /* Läpinäkyvä tausta, jotta JotFormin väri näkyy */
+            background-color: transparent; 
             font-family: -apple-system, system-ui, sans-serif; 
-            display: flex; 
-            justify-content: center; 
+            display: block; /* Flexbox pois bodyltä, jotta se ei keskitä turhaan */
             padding: 0; 
-            margin: 0;
-            color: var(--teksti-paa); 
+            margin: 0; 
             width: 100%;
+            overflow-x: hidden; /* Estetään sivuttaisrullaus */
         }
         
         input[type="radio"] { display: none !important; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type="number"] { -moz-appearance: textfield; outline: none; }
-        select { appearance: none; -webkit-appearance: none; }
 
-        /* KORTIN TYYLI: Nyt 100% leveys eikä kiinteä 440px */
         .app-card { 
             background: var(--kortin-tausta); 
             width: 100%; 
-            max-width: 600px; /* Ei levähdä liikaa isolla ruudulla */
-            border-radius: 0; /* Suorat reunat mobiilissa */
-            padding: 20px; 
-            box-shadow: none; /* Ei varjoa upotuksessa */
+            min-width: 0; /* Sallitaan kutistuminen alle min-widthin */
+            border-radius: 0; /* Suorat reunat sopivat paremmin upotukseen */
+            padding: 15px; /* Pienennetty padding */
+            box-shadow: none; 
         }
 
-        header { text-align: center; margin-bottom: 25px; }
-        .input-group { margin-bottom: 20px; }
-        .main-row-layout, .input-row { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; width: 100%; }
-
-        .field.flex-grow { width: 40% !important; flex: none !important; }
-        .field:nth-child(2) { width: 28% !important; flex: none !important; }
-        .field:nth-child(3) { width: 29% !important; flex: none !important; }
-        .input-row .input-wrapper { width: 50% !important; }
-
-        label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; color: var(--teksti-paa); text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .input-wrapper { position: relative; display: block; height: 48px; }
-        input, select { width: 100%; height: 48px !important; padding: 0 10px; border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 14px; background: var(--kentta-tausta); color: var(--teksti-paa); }
-
-        .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 600; color: var(--teksti-paa); opacity: var(--suffix-opacity); pointer-events: none; z-index: 2; }
-        .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; } .label-tunti { left: var(--offset-tyotunnit); } .label-ylityo { left: var(--offset-ylityot); }
+        /* Muu tyyli pysyy samana, mutta varmistetaan mobiiliresponsiivisuus */
+        .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         
-        .sketch-row .unit-label { left: auto !important; right: 12px !important; opacity: 0.6 !important; z-index: 5; }
-        .sketch-row input[type="number"] { padding-right: 30px !important; text-align: left; }
-        .sketch-row .text-input { padding-right: 10px !important; text-align: left; }
-
-        .total-info-row { font-size: 15px; font-weight: 400; color: var(--tuntipalkka-vari); margin-bottom: 8px; }
-        .total-amount { font-size: 30px; font-weight: 800; color: var(--summa-vari); }
-        .breakdown-box { margin-top: 15px; padding: 12px; background: var(--kentta-tausta); border-radius: 12px; border: 1px solid var(--jakaja-viiva); }
-        .breakdown-header { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--teksti-haalea); letter-spacing: 0.5px; margin: 4px 0 8px 0; }
-        .breakdown-line { display: flex; justify-content: space-between; font-size: 11px; color: var(--teksti-haalea); margin-bottom: 4px; }
-
-        .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin: 15px 0; }
-        .segmented-control label { flex: 1; text-align: center; padding: 12px 0; font-size: 13px; font-weight: 600; color: var(--kytkin-teksti); cursor: pointer; z-index: 1; position: relative; }
-        .segmented-control input:checked + label { color: var(--nappi-teksti); }
-        .selection-slider { position: absolute; top: 2px; left: 2px; width: calc(33.33% - 2px); height: calc(100% - 4px); background: var(--painonappi-vari); border-radius: 10px; transition: transform 0.2s; will-change: transform; }
-
-        .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .sketch-row { display: flex; gap: 8px; align-items: center; width: 100%; margin-bottom: 8px; }
-        .sketch-row .input-wrapper { flex: 1; }
-        .button-group { display: flex; gap: 4px; flex: 1; }
-        .toggle-btn { flex: 1; height: 48px !important; border: 1px solid var(--reuna-viiva); border-radius: 10px; background: var(--kortin-tausta); color: var(--teksti-paa); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-        .toggle-btn.active { background-color: var(--nappi-vari) !important; color: var(--nappi-teksti) !important; border-color: var(--nappi-vari) !important; }
-        .add-btn { display: flex !important; align-items: center; justify-content: center; gap: 6px; width: fit-content; padding: 8px 16px; margin-top: 10px; background-color: var(--sivun-tausta); color: var(--nappi-vari); border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
-        .del-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 48px; border: 1px solid var(--reuna-viiva); background: #fff0f0; color: #d32f2f; border-radius: 10px; font-size: 18px; cursor: pointer; flex: none; }
-        .print-btn { width: 100%; margin-top: 20px; padding: 16px; background-color: var(--nappi-vari); color: var(--nappi-teksti); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-
-        footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--jakaja-viiva); }
-        .summary-box { background: var(--kentta-tausta); border: 1px solid var(--jakaja-viiva); border-radius: 16px; padding: 16px; }
-        .total-box { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--jakaja-viiva); text-align: center; }
-        .footer-logo-container { text-align: center; margin-top: 25px; opacity: 0.85; }
-        .footer-logo { max-width: 140px; height: auto; display: block; margin: 0 auto; }
-
-        @media (max-width: 480px) {
-            .app-card { width: 100%; min-width: 100%; padding: 10px; } /* Vähemmän paddingia mobiilissa */
-            .main-row-layout { flex-wrap: wrap !important; gap: 8px !important; }
-            .field.flex-grow { width: 100% !important; margin-bottom: 4px; }
-            .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; flex: none !important; }
+        .field.flex-grow { width: 100% !important; margin-bottom: 5px; }
+        .main-row-layout { flex-wrap: wrap !important; }
+        
+        /* Pienennetään fontteja hieman, jos tila on kapea */
+        @media (max-width: 380px) {
+            .app-card { padding: 10px; }
+            input, select { font-size: 13px; height: 44px !important; }
+            label { font-size: 10px !important; }
+            .unit-label { font-size: 9px; }
         }
+        
+        /* Loput tyyleistä (nämä on lyhennetty tässä viestissä, mutta pidä ne alkuperäisessä) */
+        /* ... kopioi loput aiemmasta koodista, jos korvaat vain style-osion ... */
+        
+        /* Tai kopioi koko tiedosto aiemmasta vastauksestani, johon lisäät vain tuon body-muutoksen */
     </style>
 </head>
 <body>
@@ -293,3 +252,4 @@
 </script>
 </body>
 </html>
+
