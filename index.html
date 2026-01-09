@@ -71,16 +71,23 @@
 </head>
 <body>
 
-<div class="app-card">
-    <header>
-      <h1 style="font-size: 18px; margin-bottom: 5px;">Palkkalaskuri 2026</h1>
+<header>
+      <h1 style="font-size: 24px; margin-bottom: 8px; text-align: center;">Palkkalaskuri 2026</h1>
+      
+      <p style="font-size: 14px; color: var(--teksti-haalea); margin-bottom: 20px; text-align: center;">
+        Lentoliikenteen palveluja koskeva työehtosopimus
+      </p>
+      
       <div class="segmented-control">
         <input type="radio" name="mode" id="mode-tes" value="tes" checked onchange="paivitaNakyvyys()">
         <label for="mode-tes">Taulukko-<br>palkat</label>
+        
         <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
         <label for="mode-man">Arvio-<br>laskuri</label>
+        
         <input type="radio" name="mode" id="mode-kta" value="kta" onchange="paivitaNakyvyys()">
         <label for="mode-kta">KTA-<br>laskuri</label>
+        
         <div class="selection-slider"></div>
       </div>
     </header>
@@ -342,4 +349,5 @@
 </body>
 </html>
 ``` [cite: 2026-01-09]
+
 
