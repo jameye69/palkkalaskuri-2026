@@ -37,7 +37,6 @@
 
         label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        /* Input Wrapper & Suffix Fix */
         .input-wrapper { position: relative; display: flex; align-items: center; height: 48px; background: var(--kentta-tausta); border: 1px solid var(--reuna-viiva); border-radius: 10px; padding: 0 10px; }
         .input-wrapper input, .input-wrapper select { width: 100%; height: 100% !important; border: none; background: transparent; padding: 0; margin: 0; font-size: 14px; color: var(--teksti-paa); z-index: 1; }
         .input-wrapper input:focus, .input-wrapper select:focus { outline: none; }
@@ -89,15 +88,20 @@
           <div class="main-row-layout">
             <div class="field flex-grow">
               <label>SOPIMUSALA</label>
-              <div class="input-wrapper"><select id="ala" onchange="paivitaKentat()"><option value="maapalvelut" selected>Maapalvelut</option><option value="tekniikka">Tekniikka</option></select></div>
+              <div class="input-wrapper">
+                  <select id="ala" onchange="paivitaKentat()">
+                      <option value="maapalvelut" selected>Maapalvelut</option>
+                      <option value="tekniikka">Tekniikka</option>
+                  </select>
+              </div>
             </div>
             <div class="field narrow">
               <label>PALKKARYHMÄ</label>
-              <div class="input-wrapper"><select id="ryhma" onchange="laske()"></select><span class="unit-label label-pr">Palkkaryhmä</span></div>
+              <div class="input-wrapper"><select id="ryhma" onchange="laske()"></select><span class="unit-label label-pr">PR</span></div>
             </div>
             <div class="field narrow">
               <label>PALVELUSAIKA</label>
-              <div class="input-wrapper"><select id="kokemus" onchange="laske()"></select><span class="unit-label label-vuotta">Vuotta</span></div>
+              <div class="input-wrapper"><select id="kokemus" onchange="laske()"></select><span class="unit-label label-vuotta">V.</span></div>
             </div>
           </div>
         </div>
@@ -193,11 +197,12 @@
         
         rSel.innerHTML = ""; kSel.innerHTML = "";
         
-        const r = ala === "maapalvelu" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10,11];
+        // PÄIVITETTY LOGIIKKA UUSILLA NIMILLÄ (maapalvelut / tekniikka)
+        const r = ala === "maapalvelut" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10,11];
         r.forEach(v => rSel.add(new Option(v, v)));
         if (r.includes(parseInt(valittuRyhma))) rSel.value = valittuRyhma;
 
-        const k = ala === "maapalvelu" ? [0,2,4,6,8,10] : [0,4,6,8,10,15,20,25];
+        const k = ala === "maapalvelut" ? [0,2,4,6,8,10] : [0,4,6,8,10,15,20,25];
         k.forEach(v => kSel.add(new Option(v === 0 ? "0" : v + "+ v.", v)));
         if (k.includes(parseInt(valittuKokemus))) kSel.value = valittuKokemus;
         
@@ -230,15 +235,17 @@
         const ryh = parseInt(document.getElementById("ryhma").value) || 4;
         const kok = parseInt(document.getElementById("kokemus").value) || 0;
         
+        // PÄIVITETTY OBJEKTI UUSILLA AVAIMILLA
         const taul = {
-            maapalvelu: {4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3},
-            tekninen: {1:1911.05,2:1989.02,3:2076.29,4:2182.2,5:2303.24,6:2432.42,7:2582.54,8:2734.99,9:2895.6,10:3069.0,11:3253.16}
+            maapalvelut: {4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3},
+            tekniikka: {1:1911.05,2:1989.02,3:2076.29,4:2182.2,5:2303.24,6:2432.42,7:2582.54,8:2734.99,9:2895.6,10:3069.0,11:3253.16}
         };
         
-        const perus = taul[ala][ryh] || 0;
+        const perus = taul[ala] ? (taul[ala][ryh] || 0) : 0;
         
         let kP = 0;
-        if (ala === "maapalvelu") {
+        // PÄIVITETTY TARKISTUS
+        if (ala === "maapalvelut") {
             if (kok >= 10) kP = 0.15;
             else if (kok >= 8) kP = 0.12;
             else if (kok >= 6) kP = 0.09;
@@ -262,7 +269,8 @@
         const kokLisaEuro = perus * kP;
         const hekoEuro = perus * hP;
         const kk = perus + kokLisaEuro + hekoEuro;
-        const jakaja = ala === "maapalvelu" ? 158 : 161;
+        // PÄIVITETTY TARKISTUS
+        const jakaja = ala === "maapalvelut" ? 158 : 161;
         const tunti = kk / jakaja;
         
         let lisat = 0;
@@ -271,8 +279,9 @@
         const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
 
         if(mode === "tes") {
-            const ilt = getVal("ilt") * (ala === "maapalvelu" ? 3.06 : 3.10);
-            const yo = getVal("yo") * (ala === "maapalvelu" ? 5.11 : 5.17);
+            // PÄIVITETTY TARKISTUS
+            const ilt = getVal("ilt") * (ala === "maapalvelut" ? 3.06 : 3.10);
+            const yo = getVal("yo") * (ala === "maapalvelut" ? 5.11 : 5.17);
             const lau = getVal("lau") * tunti * 0.5;
             const sun = getVal("sun") * tunti;
             const yl50 = getVal("yl50") * tunti * 0.5;
@@ -329,4 +338,4 @@
 </script>
 </body>
 </html>
-
+``` [cite: 2026-01-09]
