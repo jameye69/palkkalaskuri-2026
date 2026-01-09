@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Palkkalaskuri 2026</title>
     <style>
-        /* --- 1. MUUTTUJAT --- [cite: 2026-01-09] */
         :root {
             --sivun-tausta: #f2f2f7; --kortin-tausta: #ffffff; --nappi-vari: #1c497b; --nappi-teksti: #ffffff;
             --summa-vari: #151515; --tuntipalkka-vari: #151515; --teksti-paa: #151515; --teksti-haalea: #8e8e93;
@@ -15,102 +14,49 @@
         }
 
         * { box-sizing: border-box; }
-        
-        body { 
-            background-color: transparent; 
-            font-family: -apple-system, system-ui, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            padding: 10px; 
-            margin: 0;
-            width: 100%;
-            color: var(--teksti-paa);
-        }
-        
+        body { background-color: transparent; font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; padding: 10px; margin: 0; width: 100%; color: var(--teksti-paa); }
         input[type="radio"] { display: none !important; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; outline: none; }
         select { appearance: none; -webkit-appearance: none; }
 
-        .app-card { 
-            background: var(--kortin-tausta); 
-            width: 100%; 
-            max-width: 480px; 
-            border-radius: 20px; 
-            padding: 20px; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin: 0 auto;
-        }
-
+        .app-card { background: var(--kortin-tausta); width: 100%; max-width: 480px; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin: 0 auto; }
         header { text-align: center; margin-bottom: 25px; }
 
-        /* --- NAPPIEN RIVITYS JA KESKITYS --- [cite: 2026-01-09] */
-        .segmented-control { 
-            position: relative; 
-            display: flex; 
-            background: var(--kytkin-pohja); 
-            padding: 2px; 
-            border-radius: 12px; 
-            margin: 15px 0; 
-            min-height: 54px; /* Varmistetaan tila kahdelle riville [cite: 2026-01-09] */
-        }
-        .segmented-control label { 
-            flex: 1; 
-            display: flex; /* Flex-asettelu napin sisällä [cite: 2026-01-09] */
-            align-items: center; /* Pystysuuntainen keskitys [cite: 2026-01-09] */
-            justify-content: center; /* Vaakasuuntainen keskitys [cite: 2026-01-09] */
-            text-align: center; 
-            padding: 4px; 
-            font-size: 11px; /* Fontti hieman pienempi, jotta mahtuu [cite: 2026-01-09] */
-            font-weight: 700; 
-            color: var(--kytkin-teksti); 
-            cursor: pointer; 
-            z-index: 1; 
-            position: relative;
-            line-height: 1.1; /* Tiiviimpi riviväli [cite: 2026-01-09] */
-            white-space: normal; /* Sallii tekstin rivittymisen [cite: 2026-01-09] */
-            transition: color 0.2s;
-        }
+        .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin: 15px 0; min-height: 54px; }
+        .segmented-control label { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px; font-size: 11px; font-weight: 700; color: var(--kytkin-teksti); cursor: pointer; z-index: 1; position: relative; line-height: 1.1; white-space: normal; transition: color 0.2s; }
         .segmented-control input:checked + label { color: var(--nappi-teksti); }
-        .selection-slider { 
-            position: absolute; 
-            top: 2px; 
-            left: 2px; 
-            width: calc(33.33% - 2px); 
-            height: calc(100% - 4px); 
-            background: var(--painonappi-vari); 
-            border-radius: 10px; 
-            transition: transform 0.2s; 
-            will-change: transform; 
-        }
+        .selection-slider { position: absolute; top: 2px; left: 2px; width: calc(33.33% - 2px); height: calc(100% - 4px); background: var(--painonappi-vari); border-radius: 10px; transition: transform 0.2s; will-change: transform; }
 
-        /* --- LOPUT TYYLIT --- [cite: 2026-01-09] */
         .input-group { margin-bottom: 20px; }
         .main-row-layout, .input-row { display: flex !important; gap: 8px; width: 100%; }
         .field.flex-grow { width: 40% !important; flex: none !important; }
         .field:nth-child(2) { width: 28% !important; flex: none !important; }
         .field:nth-child(3) { width: 29% !important; flex: none !important; }
         .input-row .input-wrapper { width: 50% !important; }
+
         label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .input-wrapper { position: relative; display: block; height: 48px; }
-        input, select { width: 100%; height: 48px !important; padding: 0 10px; border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 14px; background: var(--kentta-tausta); }
+        input, select { width: 100%; height: 48px !important; padding: 0 10px; border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 14px; background: var(--kentta-tausta); color: var(--teksti-paa); }
+
         .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 600; opacity: var(--suffix-opacity); pointer-events: none; }
-        .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; }
-        .total-amount { font-size: 30px; font-weight: 800; color: var(--summa-vari); }
-        .breakdown-box { margin-top: 15px; padding: 12px; background: var(--kentta-tausta); border-radius: 12px; border: 1px solid var(--jakaja-viiva); }
+        .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; } .label-tunti { left: 36px; } .label-h { right: 12px; }
+
+        .summary-box { background: var(--kentta-tausta); border: 1px solid var(--jakaja-viiva); border-radius: 16px; padding: 16px; margin-top: 15px; }
+        .total-box { margin: 0; padding: 0 0 12px 0; border-bottom: 1px solid var(--jakaja-viiva); text-align: center; }
+        .total-info-row { font-size: 14px; color: var(--teksti-haalea); margin-bottom: 5px; }
+        .total-amount { font-size: 28px; font-weight: 800; color: var(--summa-vari); }
+        .breakdown-box { padding-top: 12px; }
+        .breakdown-header { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--teksti-haalea); margin-bottom: 8px; }
         .breakdown-line { display: flex; justify-content: space-between; font-size: 11px; color: var(--teksti-haalea); margin-bottom: 4px; }
+
         .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .sketch-row { display: flex; gap: 8px; align-items: center; width: 100%; margin-bottom: 8px; }
         .add-btn { width: 100%; padding: 12px; background: var(--sivun-tausta); border: 1px solid var(--reuna-viiva); border-radius: 10px; color: var(--nappi-vari); font-weight: 700; cursor: pointer; }
         .print-btn { width: 100%; margin-top: 20px; padding: 16px; background-color: var(--nappi-vari); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .footer-logo-container { text-align: center; margin-top: 25px; }
-        .footer-logo { max-width: 140px; height: auto; }
-        @media (max-width: 480px) {
-            .app-card { padding: 16px; }
-            .main-row-layout { flex-wrap: wrap !important; }
-            .field.flex-grow { width: 100% !important; }
-            .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; }
-        }
+        .footer-logo-container { text-align: center; margin-top: 25px; opacity: 0.85; }
+        .footer-logo { max-width: 140px; height: auto; margin: 0 auto; display: block; }
+        @media (max-width: 480px) { .app-card { padding: 16px; } .main-row-layout { flex-wrap: wrap !important; } .field.flex-grow { width: 100% !important; } .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; } }
     </style>
 </head>
 <body>
@@ -118,73 +64,60 @@
 <div class="app-card">
     <header>
       <h1 style="font-size: 18px; margin-bottom: 5px;">Palkkalaskuri 2026</h1>
-      <p style="font-size: 12px; color: var(--teksti-haalea); margin-bottom: 15px;">Lentoliikenteen palveluja koskeva TES</p>
-      
       <div class="segmented-control">
         <input type="radio" name="mode" id="mode-tes" value="tes" checked onchange="paivitaNakyvyys()">
-        <label for="mode-tes">Taulukko-<br>palkat</label> <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
+        <label for="mode-tes">Taulukko-<br>palkat</label>
+        <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
         <label for="mode-man">Arvio-<br>laskuri</label>
-        
         <input type="radio" name="mode" id="mode-kta" value="kta" onchange="paivitaNakyvyys()">
         <label for="mode-kta">KTA-<br>laskuri</label>
-        
         <div class="selection-slider"></div>
       </div>
     </header>
 
     <main>
-      <div id="yleiset_asetukset">
+      <div id="yleiset">
         <div class="input-group">
           <div class="main-row-layout">
-            <div class="field flex-grow">
-              <label>SOPIMUSALA</label>
-              <select id="ala" onchange="paivitaJaLaske()"><option value="maapalvelu" selected>Maapalvelut</option><option value="tekninen">Tekniset</option></select>
-            </div>
-            <div class="field narrow">
-              <label>PR</label>
-              <div class="input-wrapper"><select id="ryhma" onchange="paivitaJaLaske()"></select><span class="unit-label label-pr">PR</span></div>
-            </div>
-            <div class="field narrow">
-              <label>VUOTTA</label>
-              <div class="input-wrapper"><select id="kokemus" onchange="paivitaJaLaske()"></select><span class="unit-label label-vuotta">V.</span></div>
-            </div>
+            <div class="field flex-grow"><label>ALA</label><select id="ala" onchange="paivitaKentat()"><option value="maapalvelu" selected>Maapalvelu</option><option value="tekninen">Tekniset</option></select></div>
+            <div class="field"><label>PR</label><div class="input-wrapper"><select id="ryhma" onchange="laske()"></select><span class="unit-label label-pr">PR</span></div></div>
+            <div class="field"><label>V.</label><div class="input-wrapper"><select id="kokemus" onchange="laske()"></select></div></div>
           </div>
         </div>
         <div class="input-group">
           <label>HEKO: AMHA & TYPA</label>
           <div class="input-row">
-            <div class="input-wrapper"><select id="heko_a" onchange="paivitaJaLaske()"><option value="B">B 3%</option><option value="C">C 6%</option></select></div>
-            <div class="input-wrapper"><select id="heko_t" onchange="paivitaJaLaske()"><option value="B">B 3%</option><option value="C">C 6%</option></select></div>
+            <div class="input-wrapper"><select id="heko_a" onchange="laske()"><option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option></select></div>
+            <div class="input-wrapper"><select id="heko_t" onchange="laske()"><option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option></select></div>
           </div>
         </div>
       </div>
 
       <div id="tes_osio">
-        <label>Tunnit (h)</label>
+        <label>Suoritteet (h)</label>
         <div class="grid-inputs">
-          <div class="input-wrapper"><input type="number" id="iltah" placeholder="0" oninput="suoritaLaskenta()"></div>
-          <div class="input-wrapper"><input type="number" id="lauh" placeholder="0" oninput="suoritaLaskenta()"></div>
-          <div class="input-wrapper"><input type="number" id="ylityo50" placeholder="0" oninput="suoritaLaskenta()"></div>
+          <div class="input-wrapper"><input type="number" id="ilt" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">Ilta</span></div>
+          <div class="input-wrapper"><input type="number" id="lau" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">La</span></div>
+          <div class="input-wrapper"><input type="number" id="yl50" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">50%</span></div>
         </div>
       </div>
 
-      <div id="manuaali_osio" style="display:none;">
-        <label>Perustunnit (100%)</label>
-        <div class="sketch-row"><input type="number" id="perustunnit" placeholder="158" oninput="suoritaLaskenta()"></div>
-        <button class="add-btn" onclick="lisaaRivi()">+ Lisää rivi</button>
+      <div id="man_osio" style="display:none;">
+        <label>Perustunnit (h)</label>
+        <div class="sketch-row"><div class="input-wrapper" style="flex:1"><input type="number" id="perusth" placeholder="158" oninput="laske()"><span class="unit-label label-h">h</span></div></div>
       </div>
 
       <div id="kta_osio" style="display:none;">
         <label>KTA-laskenta (3kk)</label>
-        <div class="sketch-row"><input type="number" id="kta_rahat" placeholder="Ansiot €" oninput="suoritaLaskenta()"></div>
-        <div class="sketch-row"><input type="number" id="kta_tunnit" placeholder="Tunnit h" oninput="suoritaLaskenta()"></div>
+        <div class="sketch-row"><input type="number" id="kta_r" placeholder="Ansiot €" oninput="laske()"></div>
+        <div class="sketch-row"><input type="number" id="kta_h" placeholder="Tunnit h" oninput="laske()"></div>
       </div>
 
       <div id="tulos-container"></div>
     </main>
 
     <footer>
-      <button id="print-btn" class="print-btn" onclick="window.print()">Lataa PDF / Tulosta</button>
+      <button class="print-btn" onclick="window.print()">Lataa PDF / Tulosta</button>
       <div class="footer-logo-container">
         <img src="ajastamo_25-logo_pieni.webp" alt="Ajastamo" class="footer-logo">
       </div>
@@ -193,35 +126,61 @@
 
 <script>
     function paivitaNakyvyys() {
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      const s = document.querySelector(".selection-slider");
-      document.getElementById("tes_osio").style.display = mode === "tes" ? "block" : "none";
-      document.getElementById("manuaali_osio").style.display = mode === "manuaali" ? "block" : "none";
-      document.getElementById("kta_osio").style.display = mode === "kta" ? "block" : "none";
-      s.style.transform = mode === "tes" ? "translateX(0%)" : mode === "manuaali" ? "translateX(100%)" : "translateX(200%)";
-      suoritaLaskenta();
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        const s = document.querySelector(".selection-slider");
+        document.getElementById("tes_osio").style.display = mode === "tes" ? "block" : "none";
+        document.getElementById("man_osio").style.display = mode === "manuaali" ? "block" : "none";
+        document.getElementById("kta_osio").style.display = mode === "kta" ? "block" : "none";
+        s.style.transform = mode === "tes" ? "translateX(0%)" : mode === "manuaali" ? "translateX(100%)" : "translateX(200%)";
+        laske();
     }
     function paivitaKentat() {
-      const ala = document.getElementById("ala").value, rSel = document.getElementById("ryhma"), kSel = document.getElementById("kokemus");
-      rSel.innerHTML = ""; kSel.innerHTML = "";
-      const r = ala === "maapalvelu" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10];
-      r.forEach(v => rSel.add(new Option(v, v)));
-      const k = ala === "maapalvelu" ? [0,2,6,10] : [0,4,10,25];
-      k.forEach(v => kSel.add(new Option(v === 0 ? "0" : v + "+", v)));
-      suoritaLaskenta();
+        const ala = document.getElementById("ala").value, rSel = document.getElementById("ryhma"), kSel = document.getElementById("kokemus");
+        rSel.innerHTML = ""; kSel.innerHTML = "";
+        const r = ala === "maapalvelu" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10,11];
+        r.forEach(v => rSel.add(new Option(v, v)));
+        const k = ala === "maapalvelu" ? [0,2,6,10] : [0,4,10,25];
+        k.forEach(v => kSel.add(new Option(v === 0 ? "0" : v + "+ v.", v)));
+        laske();
     }
-    function suoritaLaskenta() {
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      const tulos = document.getElementById("tulos-container");
-      if(mode === "kta") {
-        const r = parseFloat(document.getElementById("kta_rahat").value) || 0, h = parseFloat(document.getElementById("kta_tunnit").value) || 0;
-        const res = h > 0 ? r/h : 0;
-        tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-amount">${res.toFixed(2)} €/h</div></div></div>`;
-      } else {
-        const ala = document.getElementById("ala").value, r = parseInt(document.getElementById("ryhma").value) || 4;
-        const perus = ala === "maapalvelu" ? 2205.06 : 2182.20; // Esimerkkiarvot [cite: 2026-01-09]
-        tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">Palkka yhteensä</div><div class="total-amount">${perus.toFixed(2)} €</div></div></div>`;
-      }
+    function laske() {
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        const tulos = document.getElementById("tulos-container");
+        if(mode === "kta") {
+            const r = parseFloat(document.getElementById("kta_r").value) || 0, h = parseFloat(document.getElementById("kta_h").value) || 0;
+            const res = h > 0 ? r/h : 0;
+            tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">KTA</div><div class="total-amount">${res.toFixed(2)} €/h</div></div></div>`;
+            return;
+        }
+        const ala = document.getElementById("ala").value, ryh = parseInt(document.getElementById("ryhma").value), kok = parseInt(document.getElementById("kokemus").value);
+        const taul = {maapalvelu:{4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3}, tekninen:{1:1911.05,2:1989.02,3:2076.29,4:2182.2,5:2303.24,6:2432.42,7:2582.54,8:2734.99,9:2895.6,10:3069,11:3253.16}};
+        const perus = taul[ala][ryh] || 0;
+        const kP = ala === "maapalvelu" ? (kok >= 10 ? 0.15 : kok >= 6 ? 0.09 : kok >= 2 ? 0.03 : 0) : (kok >= 25 ? 0.19 : kok >= 10 ? 0.15 : kok >= 4 ? 0.05 : 0);
+        const hA = document.getElementById("heko_a").value, hT = document.getElementById("heko_t").value;
+        const hMap = {A:0, B:0.03, C:0.06, D:0.09};
+        const hP = hMap[hA] + hMap[hT];
+        const kk = perus * (1 + kP + hP), tunti = kk / (ala === "maapalvelu" ? 158 : 161);
+        
+        let extra = 0;
+        if(mode === "tes") {
+            extra += (parseFloat(document.getElementById("ilt").value) || 0) * (ala === "maapalvelu" ? 3.06 : 3.10);
+            extra += (parseFloat(document.getElementById("lau").value) || 0) * tunti * 0.5;
+            extra += (parseFloat(document.getElementById("yl50").value) || 0) * tunti * 1.5;
+        }
+        
+        tulos.innerHTML = `
+            <div class="summary-box">
+                <div class="total-box">
+                    <div class="total-info-row">${tunti.toFixed(2)} €/h</div>
+                    <div class="total-amount">${(kk + extra).toFixed(2)} €/kk</div>
+                </div>
+                <div class="breakdown-box">
+                    <div class="breakdown-header">Palkan muodostus</div>
+                    <div class="breakdown-line"><span>Taulukkopalkka</span><span>${perus.toFixed(2)}€</span></div>
+                    <div class="breakdown-line"><span>HEKO-kirjaimet: ${hA}${hT} (${(hP*100).toFixed(0)}%)</span><span>${(perus*hP).toFixed(2)}€</span></div>
+                    <div class="breakdown-line"><span>Kokemuslisä</span><span>${(perus*kP).toFixed(2)}€</span></div>
+                </div>
+            </div>`;
     }
     window.onload = paivitaKentat;
 </script>
