@@ -27,7 +27,6 @@
         .input-group { margin-bottom: 20px; }
         .main-row-layout, .input-row { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; width: 100%; }
 
-        /* Kenttien leveydet (40/28/29) */
         .field.flex-grow { width: 40% !important; flex: none !important; }
         .field:nth-child(2) { width: 28% !important; flex: none !important; }
         .field:nth-child(3) { width: 29% !important; flex: none !important; }
@@ -41,7 +40,6 @@
         .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 600; color: var(--teksti-paa); opacity: var(--suffix-opacity); pointer-events: none; z-index: 2; }
         .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; } .label-tunti { left: var(--offset-tyotunnit); } .label-ylityo { left: var(--offset-ylityot); }
         
-        /* Dynaamiset rivit */
         .sketch-row .unit-label { left: auto !important; right: 12px !important; opacity: 0.6 !important; z-index: 5; }
         .sketch-row input[type="number"] { padding-right: 30px !important; text-align: left; }
         .sketch-row .text-input { padding-right: 10px !important; text-align: left; }
@@ -189,7 +187,6 @@
 </div>
 
 <script>
-    /* --- LOGIIKKA --- */
     function valitseProsentti(nappi, riviId) {
       const group = nappi.parentElement;
       const hiddenInput = document.getElementById("prosentti_" + riviId);
@@ -248,11 +245,20 @@
       const taulukot = { tekninen: { 1: 1911.05, 2: 1989.02, 3: 2076.29, 4: 2182.2, 5: 2303.24, 6: 2432.42, 7: 2582.54, 8: 2734.99, 9: 2895.6, 10: 3069.0, 11: 3253.16 }, maapalvelu: { 4: 2205.06, 5: 2320.87, 6: 2444.46, 7: 2585.88, 8: 2730.63, 9: 2884.3 } };
       const jakaja = ala === "tekninen" ? 161 : 158, perus = taulukot[ala][ryhma] || 0;
       let kP = ala === "tekninen" ? (kokemus >= 25 ? 0.19 : kokemus >= 10 ? 0.15 : kokemus >= 4 ? 0.05 : 0) : (kokemus >= 10 ? 0.15 : kokemus >= 6 ? 0.09 : kokemus >= 2 ? 0.03 : 0);
-      const hMap = { A: 0, B: 0.03, C: 0.06, D: 0.09, E: 0.12 }, hP = hMap[document.getElementById("heko_a").value] + hMap[document.getElementById("heko_t").value];
+      
+      /* --- HEKO KIRJAIMET & LASKENTA --- */
+      const hA_val = document.getElementById("heko_a").value; // Esim "B"
+      const hT_val = document.getElementById("heko_t").value; // Esim "C"
+      const hMap = { A: 0, B: 0.03, C: 0.06, D: 0.09, E: 0.12 };
+      const hP = hMap[hA_val] + hMap[hT_val];
+      
       const eK = perus * kP, eH = perus * hP, kk = perus + eK + eH, tunti = kk / jakaja;
       let erittely = `<div class="breakdown-header">Palkan muodostus</div><div class="breakdown-line"><span>Taulukkopalkka</span><span>${perus.toFixed(2)}€</span></div>`;
       if (eK > 0) erittely += `<div class="breakdown-line"><span>Kokemuslisä (${(kP*100).toFixed(0)}%)</span><span>${eK.toFixed(2)}€</span></div>`;
-      if (eH > 0) erittely += `<div class="breakdown-line"><span>HEKO-osa (${(hP*100).toFixed(0)}%)</span><span>${eH.toFixed(2)}€</span></div>`;
+      
+      // NÄYTETÄÄN KIRJAIMET KOOSTEESSA:
+      if (eH > 0) erittely += `<div class="breakdown-line"><span>HEKO-kirjaimet: ${hA_val}${hT_val} (${(hP*100).toFixed(0)}%)</span><span>${eH.toFixed(2)}€</span></div>`;
+      
       erittely += `<div class="breakdown-header" style="margin-top:12px;">Suoritepalkkaus</div>`;
       let lSumma = 0; const getH = (id) => Math.max(0, parseFloat(document.getElementById(id).value) || 0);
       if (mode === "tes") {
