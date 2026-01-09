@@ -30,9 +30,10 @@
 
         .input-group { margin-bottom: 20px; }
         .main-row-layout, .input-row { display: flex !important; gap: 8px; width: 100%; }
-        .field.flex-grow { width: 40% !important; flex: none !important; }
-        .field:nth-child(2) { width: 28% !important; flex: none !important; }
-        .field:nth-child(3) { width: 29% !important; flex: none !important; }
+        /* Palautetaan leveydet fiksuiksi */
+        .field.flex-grow { width: 45% !important; flex: none !important; }
+        .field:nth-child(2) { width: 25% !important; flex: none !important; }
+        .field:nth-child(3) { width: 30% !important; flex: none !important; }
         .input-row .input-wrapper { width: 50% !important; }
 
         label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -53,6 +54,7 @@
         .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .sketch-row { display: flex; gap: 8px; align-items: center; width: 100%; margin-bottom: 8px; }
         .add-btn { width: 100%; padding: 12px; background: var(--sivun-tausta); border: 1px solid var(--reuna-viiva); border-radius: 10px; color: var(--nappi-vari); font-weight: 700; cursor: pointer; }
+        .del-btn { width: 40px; height: 48px; background: #fff0f0; border: 1px solid #d1d1d6; color: #d32f2f; border-radius: 10px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
         .print-btn { width: 100%; margin-top: 20px; padding: 16px; background-color: var(--nappi-vari); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
         .footer-logo-container { text-align: center; margin-top: 25px; opacity: 0.85; }
         .footer-logo { max-width: 140px; height: auto; margin: 0 auto; display: block; }
@@ -79,32 +81,63 @@
       <div id="yleiset">
         <div class="input-group">
           <div class="main-row-layout">
-            <div class="field flex-grow"><label>ALA</label><select id="ala" onchange="paivitaKentat()"><option value="maapalvelu" selected>Maapalvelu</option><option value="tekninen">Tekniset</option></select></div>
-            <div class="field"><label>PR</label><div class="input-wrapper"><select id="ryhma" onchange="laske()"></select><span class="unit-label label-pr">PR</span></div></div>
-            <div class="field"><label>V.</label><div class="input-wrapper"><select id="kokemus" onchange="laske()"></select></div></div>
+            <div class="field flex-grow">
+              <label>SOPIMUSALA</label>
+              <select id="ala" onchange="paivitaKentat()">
+                <option value="maapalvelu" selected>Maapalvelu</option>
+                <option value="tekninen">Tekniset</option>
+              </select>
+            </div>
+            <div class="field narrow">
+              <label>PALKKARYHMÄ</label>
+              <div class="input-wrapper"><select id="ryhma" onchange="laske()"></select><span class="unit-label label-pr">PR</span></div>
+            </div>
+            <div class="field narrow">
+              <label>PALVELUSAIKA</label>
+              <div class="input-wrapper"><select id="kokemus" onchange="laske()"></select><span class="unit-label label-vuotta">V.</span></div>
+            </div>
           </div>
         </div>
         <div class="input-group">
-          <label>HEKO: AMHA & TYPA</label>
+          <label>HEKO: AMMATINHALLINTA & TYÖSKENTELYTAPA</label>
           <div class="input-row">
-            <div class="input-wrapper"><select id="heko_a" onchange="laske()"><option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option></select></div>
-            <div class="input-wrapper"><select id="heko_t" onchange="laske()"><option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option></select></div>
+            <div class="input-wrapper">
+              <select id="heko_a" onchange="laske()">
+                <option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option><option value="E">E 12%</option>
+              </select>
+              <span class="unit-label label-amha">AMHA</span>
+            </div>
+            <div class="input-wrapper">
+              <select id="heko_t" onchange="laske()">
+                <option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option><option value="E">E 12%</option>
+              </select>
+              <span class="unit-label label-typa">TYPA</span>
+            </div>
           </div>
         </div>
       </div>
 
       <div id="tes_osio">
-        <label>Suoritteet (h)</label>
+        <label>Työtunnit (h)</label>
         <div class="grid-inputs">
           <div class="input-wrapper"><input type="number" id="ilt" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">Ilta</span></div>
           <div class="input-wrapper"><input type="number" id="lau" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">La</span></div>
           <div class="input-wrapper"><input type="number" id="yl50" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">50%</span></div>
+          <div class="input-wrapper"><input type="number" id="yo" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">Yö</span></div>
+          <div class="input-wrapper"><input type="number" id="sun" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">Su</span></div>
+          <div class="input-wrapper"><input type="number" id="yl100" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">100%</span></div>
         </div>
       </div>
 
       <div id="man_osio" style="display:none;">
         <label>Perustunnit (h)</label>
         <div class="sketch-row"><div class="input-wrapper" style="flex:1"><input type="number" id="perusth" placeholder="158" oninput="laske()"><span class="unit-label label-h">h</span></div></div>
+        <label style="margin-top:15px;">%-tunnit</label>
+        <div id="prosentti_rivit"></div>
+        <button class="add-btn" onclick="lisaaRivi('p')">+ Lisää %-rivi</button>
+        <label style="margin-top:15px;">Erillislisät (€)</label>
+        <div id="euro_rivit"></div>
+        <button class="add-btn" onclick="lisaaRivi('e')">+ Lisää €-rivi</button>
       </div>
 
       <div id="kta_osio" style="display:none;">
@@ -134,55 +167,154 @@
         s.style.transform = mode === "tes" ? "translateX(0%)" : mode === "manuaali" ? "translateX(100%)" : "translateX(200%)";
         laske();
     }
+    
     function paivitaKentat() {
         const ala = document.getElementById("ala").value, rSel = document.getElementById("ryhma"), kSel = document.getElementById("kokemus");
+        const valittuRyhma = rSel.value;
+        const valittuKokemus = kSel.value;
+        
         rSel.innerHTML = ""; kSel.innerHTML = "";
+        
         const r = ala === "maapalvelu" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10,11];
         r.forEach(v => rSel.add(new Option(v, v)));
-        const k = ala === "maapalvelu" ? [0,2,6,10] : [0,4,10,25];
+        
+        // Palautetaan vanha valinta jos mahdollista, muuten oletus
+        if (r.includes(parseInt(valittuRyhma))) rSel.value = valittuRyhma;
+
+        const k = ala === "maapalvelu" ? [0,2,4,6,8,10] : [0,4,6,8,10,15,20,25];
         k.forEach(v => kSel.add(new Option(v === 0 ? "0" : v + "+ v.", v)));
+        
+        // Sama kokemukselle
+        if (k.includes(parseInt(valittuKokemus))) kSel.value = valittuKokemus;
+        
         laske();
     }
+    
+    function lisaaRivi(type) {
+        const container = type === 'p' ? document.getElementById("prosentti_rivit") : document.getElementById("euro_rivit");
+        const div = document.createElement("div"); div.className = "sketch-row";
+        if(type === 'p') {
+            div.innerHTML = `<div class="input-wrapper" style="flex:1"><input type="number" class="p-h" placeholder="h" oninput="laske()"><span class="unit-label label-h">h</span></div><div style="flex:1"><select class="p-val" onchange="laske()"><option value="0.5">50%</option><option value="1.0">100%</option></select></div><button class="del-btn" onclick="this.parentElement.remove();laske()">×</button>`;
+        } else {
+            div.innerHTML = `<div class="input-wrapper" style="flex:1.5"><input type="text" placeholder="Selite"></div><div class="input-wrapper" style="flex:1"><input type="number" class="e-v" placeholder="€" oninput="laske()"></div><button class="del-btn" onclick="this.parentElement.remove();laske()">×</button>`;
+        }
+        container.appendChild(div);
+    }
+
     function laske() {
         const mode = document.querySelector('input[name="mode"]:checked').value;
         const tulos = document.getElementById("tulos-container");
+        
         if(mode === "kta") {
             const r = parseFloat(document.getElementById("kta_r").value) || 0, h = parseFloat(document.getElementById("kta_h").value) || 0;
             const res = h > 0 ? r/h : 0;
-            tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">KTA</div><div class="total-amount">${res.toFixed(2)} €/h</div></div></div>`;
+            tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">KTA</div><div class="total-amount">${res.toFixed(2)} €/h</div></div><div class="breakdown-box"><div style="font-size:11px;color:#8e8e93;">Laskettu 3kk ansioista (${r}€ / ${h}h)</div></div></div>`;
             return;
         }
-        const ala = document.getElementById("ala").value, ryh = parseInt(document.getElementById("ryhma").value), kok = parseInt(document.getElementById("kokemus").value);
-        const taul = {maapalvelu:{4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3}, tekninen:{1:1911.05,2:1989.02,3:2076.29,4:2182.2,5:2303.24,6:2432.42,7:2582.54,8:2734.99,9:2895.6,10:3069,11:3253.16}};
-        const perus = taul[ala][ryh] || 0;
-        const kP = ala === "maapalvelu" ? (kok >= 10 ? 0.15 : kok >= 6 ? 0.09 : kok >= 2 ? 0.03 : 0) : (kok >= 25 ? 0.19 : kok >= 10 ? 0.15 : kok >= 4 ? 0.05 : 0);
-        const hA = document.getElementById("heko_a").value, hT = document.getElementById("heko_t").value;
-        const hMap = {A:0, B:0.03, C:0.06, D:0.09};
-        const hP = hMap[hA] + hMap[hT];
-        const kk = perus * (1 + kP + hP), tunti = kk / (ala === "maapalvelu" ? 158 : 161);
+
+        const ala = document.getElementById("ala").value;
+        const ryh = parseInt(document.getElementById("ryhma").value) || 4;
+        const kok = parseInt(document.getElementById("kokemus").value) || 0;
         
-        let extra = 0;
+        const taul = {
+            maapalvelu: {4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3},
+            tekninen: {1:1911.05,2:1989.02,3:2076.29,4:2182.2,5:2303.24,6:2432.42,7:2582.54,8:2734.99,9:2895.6,10:3069.0,11:3253.16}
+        };
+        
+        const perus = taul[ala][ryh] || 0;
+        
+        // Kokemuslisälogiikka
+        let kP = 0;
+        if (ala === "maapalvelu") {
+            if (kok >= 10) kP = 0.15;
+            else if (kok >= 8) kP = 0.12; // Korjattu väliportaat jos tarpeen
+            else if (kok >= 6) kP = 0.09;
+            else if (kok >= 4) kP = 0.06;
+            else if (kok >= 2) kP = 0.03;
+        } else {
+            if (kok >= 25) kP = 0.19;
+            else if (kok >= 20) kP = 0.17; // Lisätty puuttuvat tekniset portaat
+            else if (kok >= 15) kP = 0.16;
+            else if (kok >= 10) kP = 0.15;
+            else if (kok >= 8) kP = 0.11;
+            else if (kok >= 6) kP = 0.09;
+            else if (kok >= 4) kP = 0.05;
+        }
+
+        // HEKO
+        const hA = document.getElementById("heko_a").value;
+        const hT = document.getElementById("heko_t").value;
+        const hMap = {A:0, B:0.03, C:0.06, D:0.09, E:0.12};
+        const hP = hMap[hA] + hMap[hT];
+
+        const kokLisaEuro = perus * kP;
+        const hekoEuro = perus * hP;
+        const kk = perus + kokLisaEuro + hekoEuro;
+        const jakaja = ala === "maapalvelu" ? 158 : 161;
+        const tunti = kk / jakaja;
+        
+        let lisat = 0;
+        let erittelyHTML = "";
+
+        const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+
         if(mode === "tes") {
-            extra += (parseFloat(document.getElementById("ilt").value) || 0) * (ala === "maapalvelu" ? 3.06 : 3.10);
-            extra += (parseFloat(document.getElementById("lau").value) || 0) * tunti * 0.5;
-            extra += (parseFloat(document.getElementById("yl50").value) || 0) * tunti * 1.5;
+            const ilt = getVal("ilt") * (ala === "maapalvelu" ? 3.06 : 3.10);
+            const yo = getVal("yo") * (ala === "maapalvelu" ? 5.11 : 5.17); // Oletusarvot, tarkista TES jos eri
+            const lau = getVal("lau") * tunti * 0.5;
+            const sun = getVal("sun") * tunti; // 100% korotus
+            const yl50 = getVal("yl50") * tunti * 0.5; // Huom: TES usein peruspalkka + 50%
+            const yl100 = getVal("yl100") * tunti;
+            
+            lisat = ilt + yo + lau + sun + yl50 + yl100;
+            
+            if(ilt>0) erittelyHTML += `<div class="breakdown-line"><span>Iltalisä</span><span>${ilt.toFixed(2)}€</span></div>`;
+            if(yo>0) erittelyHTML += `<div class="breakdown-line"><span>Yölisä</span><span>${yo.toFixed(2)}€</span></div>`;
+            if(lau>0) erittelyHTML += `<div class="breakdown-line"><span>Lauantailisä</span><span>${lau.toFixed(2)}€</span></div>`;
+            if(sun>0) erittelyHTML += `<div class="breakdown-line"><span>Sunnuntailisä</span><span>${sun.toFixed(2)}€</span></div>`;
+            if(yl50>0) erittelyHTML += `<div class="breakdown-line"><span>Ylityö 50%</span><span>${yl50.toFixed(2)}€</span></div>`;
+        } else {
+             // Manuaali
+             const perusH = getVal("perusth") * tunti;
+             lisat += perusH;
+             if(perusH>0) erittelyHTML += `<div class="breakdown-line"><span>Perustunnit</span><span>${perusH.toFixed(2)}€</span></div>`;
+             
+             document.querySelectorAll("#prosentti_rivit .sketch-row").forEach(r => {
+                 const h = parseFloat(r.querySelector(".p-h").value) || 0;
+                 const p = parseFloat(r.querySelector(".p-val").value) || 0;
+                 const sum = h * tunti * p;
+                 lisat += sum;
+                 if(sum>0) erittelyHTML += `<div class="breakdown-line"><span>Lisä ${(p*100).toFixed(0)}% (${h}h)</span><span>${sum.toFixed(2)}€</span></div>`;
+             });
+             
+             document.querySelectorAll("#euro_rivit .sketch-row").forEach(r => {
+                 const v = parseFloat(r.querySelector(".e-v").value) || 0;
+                 lisat += v;
+                 if(v>0) erittelyHTML += `<div class="breakdown-line"><span>Erillislisä</span><span>${v.toFixed(2)}€</span></div>`;
+             });
         }
         
         tulos.innerHTML = `
             <div class="summary-box">
                 <div class="total-box">
-                    <div class="total-info-row">${tunti.toFixed(2)} €/h</div>
-                    <div class="total-amount">${(kk + extra).toFixed(2)} €/kk</div>
+                    <div class="total-info-row">Tuntipalkka: ${tunti.toFixed(2)} €/h</div>
+                    <div class="total-amount">${(mode === "tes" ? kk + lisat : lisat).toFixed(2)} €</div>
                 </div>
                 <div class="breakdown-box">
                     <div class="breakdown-header">Palkan muodostus</div>
                     <div class="breakdown-line"><span>Taulukkopalkka</span><span>${perus.toFixed(2)}€</span></div>
-                    <div class="breakdown-line"><span>HEKO-kirjaimet: ${hA}${hT} (${(hP*100).toFixed(0)}%)</span><span>${(perus*hP).toFixed(2)}€</span></div>
-                    <div class="breakdown-line"><span>Kokemuslisä</span><span>${(perus*kP).toFixed(2)}€</span></div>
+                    <div class="breakdown-line"><span>Kokemuslisä (${(kP*100).toFixed(0)}%)</span><span>${kokLisaEuro.toFixed(2)}€</span></div>
+                    <div class="breakdown-line"><span>HEKO-kirjaimet: ${hA}${hT} (${(hP*100).toFixed(0)}%)</span><span>${hekoEuro.toFixed(2)}€</span></div>
+                    ${mode === "tes" ? `<div class="breakdown-header" style="margin-top:8px;">Lisät</div>` : `<div class="breakdown-header" style="margin-top:8px;">Suoritteet</div>`}
+                    ${erittelyHTML}
                 </div>
             </div>`;
     }
-    window.onload = paivitaKentat;
+    
+    // Alustetaan kerran
+    window.onload = function() {
+        paivitaKentat();
+    };
 </script>
 </body>
 </html>
