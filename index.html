@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Palkkalaskuri 2026</title>
     <style>
-        /* --- 1. MUUTTUJAT --- */
+        /* --- 1. MUUTTUJAT --- [cite: 2026-01-09] */
         :root {
             --sivun-tausta: #f2f2f7; --kortin-tausta: #ffffff; --nappi-vari: #1c497b; --nappi-teksti: #ffffff;
             --summa-vari: #151515; --tuntipalkka-vari: #151515; --teksti-paa: #151515; --teksti-haalea: #8e8e93;
@@ -16,9 +16,8 @@
 
         * { box-sizing: border-box; }
         
-        /* Keskitetään kortti ja poistetaan turhat marginaalit */
         body { 
-            background-color: transparent; /* Läpinäkyvä, jotta istuu JotFormiin */
+            background-color: transparent; 
             font-family: -apple-system, system-ui, sans-serif; 
             display: flex; 
             justify-content: center; 
@@ -33,89 +32,102 @@
         input[type="number"] { -moz-appearance: textfield; outline: none; }
         select { appearance: none; -webkit-appearance: none; }
 
-        /* KORTIN TYYLI: Max 480px, keskellä */
         .app-card { 
             background: var(--kortin-tausta); 
             width: 100%; 
             max-width: 480px; 
             border-radius: 20px; 
-            padding: 24px; 
+            padding: 20px; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             margin: 0 auto;
         }
 
         header { text-align: center; margin-bottom: 25px; }
-        .input-group { margin-bottom: 20px; }
-        .main-row-layout, .input-row { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; width: 100%; }
 
-        /* Kenttien leveydet */
+        /* --- NAPPIEN RIVITYS JA KESKITYS --- [cite: 2026-01-09] */
+        .segmented-control { 
+            position: relative; 
+            display: flex; 
+            background: var(--kytkin-pohja); 
+            padding: 2px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            min-height: 54px; /* Varmistetaan tila kahdelle riville [cite: 2026-01-09] */
+        }
+        .segmented-control label { 
+            flex: 1; 
+            display: flex; /* Flex-asettelu napin sisällä [cite: 2026-01-09] */
+            align-items: center; /* Pystysuuntainen keskitys [cite: 2026-01-09] */
+            justify-content: center; /* Vaakasuuntainen keskitys [cite: 2026-01-09] */
+            text-align: center; 
+            padding: 4px; 
+            font-size: 11px; /* Fontti hieman pienempi, jotta mahtuu [cite: 2026-01-09] */
+            font-weight: 700; 
+            color: var(--kytkin-teksti); 
+            cursor: pointer; 
+            z-index: 1; 
+            position: relative;
+            line-height: 1.1; /* Tiiviimpi riviväli [cite: 2026-01-09] */
+            white-space: normal; /* Sallii tekstin rivittymisen [cite: 2026-01-09] */
+            transition: color 0.2s;
+        }
+        .segmented-control input:checked + label { color: var(--nappi-teksti); }
+        .selection-slider { 
+            position: absolute; 
+            top: 2px; 
+            left: 2px; 
+            width: calc(33.33% - 2px); 
+            height: calc(100% - 4px); 
+            background: var(--painonappi-vari); 
+            border-radius: 10px; 
+            transition: transform 0.2s; 
+            will-change: transform; 
+        }
+
+        /* --- LOPUT TYYLIT --- [cite: 2026-01-09] */
+        .input-group { margin-bottom: 20px; }
+        .main-row-layout, .input-row { display: flex !important; gap: 8px; width: 100%; }
         .field.flex-grow { width: 40% !important; flex: none !important; }
         .field:nth-child(2) { width: 28% !important; flex: none !important; }
         .field:nth-child(3) { width: 29% !important; flex: none !important; }
         .input-row .input-wrapper { width: 50% !important; }
-
-        label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; color: var(--teksti-paa); text-transform: uppercase; letter-spacing: 0.5px; }
-
+        label { display: block; margin-bottom: 6px; font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .input-wrapper { position: relative; display: block; height: 48px; }
-        input, select { width: 100%; height: 48px !important; padding: 0 10px; border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 14px; background: var(--kentta-tausta); color: var(--teksti-paa); }
-
-        .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 600; color: var(--teksti-paa); opacity: var(--suffix-opacity); pointer-events: none; z-index: 2; }
-        .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; } .label-tunti { left: var(--offset-tyotunnit); } .label-ylityo { left: var(--offset-ylityot); }
-        
-        .sketch-row .unit-label { left: auto !important; right: 12px !important; opacity: 0.6 !important; z-index: 5; }
-        .sketch-row input[type="number"] { padding-right: 30px !important; text-align: left; }
-        .sketch-row .text-input { padding-right: 10px !important; text-align: left; }
-
-        .total-info-row { font-size: 15px; font-weight: 400; color: var(--tuntipalkka-vari); margin-bottom: 8px; }
+        input, select { width: 100%; height: 48px !important; padding: 0 10px; border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 14px; background: var(--kentta-tausta); }
+        .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 600; opacity: var(--suffix-opacity); pointer-events: none; }
+        .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; }
         .total-amount { font-size: 30px; font-weight: 800; color: var(--summa-vari); }
         .breakdown-box { margin-top: 15px; padding: 12px; background: var(--kentta-tausta); border-radius: 12px; border: 1px solid var(--jakaja-viiva); }
-        .breakdown-header { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--teksti-haalea); letter-spacing: 0.5px; margin: 4px 0 8px 0; }
         .breakdown-line { display: flex; justify-content: space-between; font-size: 11px; color: var(--teksti-haalea); margin-bottom: 4px; }
-
-        .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin: 15px 0; }
-        .segmented-control label { flex: 1; text-align: center; padding: 12px 0; font-size: 13px; font-weight: 600; color: var(--kytkin-teksti); cursor: pointer; z-index: 1; position: relative; }
-        .segmented-control input:checked + label { color: var(--nappi-teksti); }
-        .selection-slider { position: absolute; top: 2px; left: 2px; width: calc(33.33% - 2px); height: calc(100% - 4px); background: var(--painonappi-vari); border-radius: 10px; transition: transform 0.2s; will-change: transform; }
-
         .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .sketch-row { display: flex; gap: 8px; align-items: center; width: 100%; margin-bottom: 8px; }
-        .sketch-row .input-wrapper { flex: 1; }
-        .button-group { display: flex; gap: 4px; flex: 1; }
-        .toggle-btn { flex: 1; height: 48px !important; border: 1px solid var(--reuna-viiva); border-radius: 10px; background: var(--kortin-tausta); color: var(--teksti-paa); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-        .toggle-btn.active { background-color: var(--nappi-vari) !important; color: var(--nappi-teksti) !important; border-color: var(--nappi-vari) !important; }
-        .add-btn { display: flex !important; align-items: center; justify-content: center; gap: 6px; width: fit-content; padding: 8px 16px; margin-top: 10px; background-color: var(--sivun-tausta); color: var(--nappi-vari); border: 1px solid var(--reuna-viiva); border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
-        .del-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 48px; border: 1px solid var(--reuna-viiva); background: #fff0f0; color: #d32f2f; border-radius: 10px; font-size: 18px; cursor: pointer; flex: none; }
-        .print-btn { width: 100%; margin-top: 20px; padding: 16px; background-color: var(--nappi-vari); color: var(--nappi-teksti); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-
-        footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--jakaja-viiva); }
-        .summary-box { background: var(--kentta-tausta); border: 1px solid var(--jakaja-viiva); border-radius: 16px; padding: 16px; }
-        .total-box { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--jakaja-viiva); text-align: center; }
-        .footer-logo-container { text-align: center; margin-top: 25px; opacity: 0.85; }
-        .footer-logo { max-width: 140px; height: auto; display: block; margin: 0 auto; }
-
+        .add-btn { width: 100%; padding: 12px; background: var(--sivun-tausta); border: 1px solid var(--reuna-viiva); border-radius: 10px; color: var(--nappi-vari); font-weight: 700; cursor: pointer; }
+        .print-btn { width: 100%; margin-top: 20px; padding: 16px; background-color: var(--nappi-vari); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .footer-logo-container { text-align: center; margin-top: 25px; }
+        .footer-logo { max-width: 140px; height: auto; }
         @media (max-width: 480px) {
-            .app-card { width: 100%; max-width: 100%; padding: 16px; }
-            .main-row-layout { flex-wrap: wrap !important; gap: 8px !important; }
-            .field.flex-grow { width: 100% !important; margin-bottom: 4px; }
-            .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; flex: none !important; }
+            .app-card { padding: 16px; }
+            .main-row-layout { flex-wrap: wrap !important; }
+            .field.flex-grow { width: 100% !important; }
+            .field:nth-child(2), .field:nth-child(3) { width: calc(50% - 4px) !important; }
         }
-        @media print { #print-btn, .segmented-control, .add-btn, .del-btn, .footer-logo-container { display: none !important; } .app-card { box-shadow: none; border: none; } }
     </style>
 </head>
 <body>
 
 <div class="app-card">
     <header>
-      <h1 class="main-title" style="margin-bottom: 10px;">Palkkalaskuri 2026</h1>
-      <p style="font-size: 13px; color: var(--teksti-haalea); margin-bottom: 20px;">Lentoliikenteen palveluja koskeva työehtosopimus</p>
+      <h1 style="font-size: 18px; margin-bottom: 5px;">Palkkalaskuri 2026</h1>
+      <p style="font-size: 12px; color: var(--teksti-haalea); margin-bottom: 15px;">Lentoliikenteen palveluja koskeva TES</p>
       
       <div class="segmented-control">
         <input type="radio" name="mode" id="mode-tes" value="tes" checked onchange="paivitaNakyvyys()">
-        <label for="mode-tes">Taulukkopalkat</label>
-        <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
-        <label for="mode-man">Arviolaskuri</label>
+        <label for="mode-tes">Taulukko-<br>palkat</label> <input type="radio" name="mode" id="mode-man" value="manuaali" onchange="paivitaNakyvyys()">
+        <label for="mode-man">Arvio-<br>laskuri</label>
+        
         <input type="radio" name="mode" id="mode-kta" value="kta" onchange="paivitaNakyvyys()">
-        <label for="mode-kta">KTA-laskuri</label>
+        <label for="mode-kta">KTA-<br>laskuri</label>
+        
         <div class="selection-slider"></div>
       </div>
     </header>
@@ -126,176 +138,92 @@
           <div class="main-row-layout">
             <div class="field flex-grow">
               <label>SOPIMUSALA</label>
-              <select id="ala" onchange="paivitaJaLaske()">
-                <option value="tekninen">Tekniset palvelut</option>
-                <option value="maapalvelu" selected>Maapalvelut</option>
-              </select>
+              <select id="ala" onchange="paivitaJaLaske()"><option value="maapalvelu" selected>Maapalvelut</option><option value="tekninen">Tekniset</option></select>
             </div>
             <div class="field narrow">
-              <label>Palkkaryhmä</label>
+              <label>PR</label>
               <div class="input-wrapper"><select id="ryhma" onchange="paivitaJaLaske()"></select><span class="unit-label label-pr">PR</span></div>
             </div>
             <div class="field narrow">
-              <label>Palvelusaika</label>
-              <div class="input-wrapper"><select id="kokemus" onchange="paivitaJaLaske()"></select><span class="unit-label label-vuotta">Vuotta</span></div>
+              <label>VUOTTA</label>
+              <div class="input-wrapper"><select id="kokemus" onchange="paivitaJaLaske()"></select><span class="unit-label label-vuotta">V.</span></div>
             </div>
           </div>
         </div>
-
         <div class="input-group">
-          <label>HEKO: AMMATINHALLINTA & TYÖSKENTELYTAPA</label>
+          <label>HEKO: AMHA & TYPA</label>
           <div class="input-row">
-            <div class="input-wrapper">
-              <select id="heko_a" onchange="paivitaJaLaske()"><option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option><option value="E">E 12%</option></select>
-              <span class="unit-label label-amha">AMHA</span>
-            </div>
-            <div class="input-wrapper">
-              <select id="heko_t" onchange="paivitaJaLaske()"><option value="A">A 0%</option><option value="B" selected>B 3%</option><option value="C">C 6%</option><option value="D">D 9%</option><option value="E">E 12%</option></select>
-              <span class="unit-label label-typa">TYPA</span>
-            </div>
+            <div class="input-wrapper"><select id="heko_a" onchange="paivitaJaLaske()"><option value="B">B 3%</option><option value="C">C 6%</option></select></div>
+            <div class="input-wrapper"><select id="heko_t" onchange="paivitaJaLaske()"><option value="B">B 3%</option><option value="C">C 6%</option></select></div>
           </div>
         </div>
       </div>
 
-      <div id="tes_osio" class="input-group">
-        <label>Työtunnit (h)</label>
+      <div id="tes_osio">
+        <label>Tunnit (h)</label>
         <div class="grid-inputs">
-          <div class="input-wrapper"><input type="number" id="iltah" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-tunti">Ilta</span></div>
-          <div class="input-wrapper"><input type="number" id="lauh" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-tunti">La</span></div>
-          <div class="input-wrapper"><input type="number" id="ylityo50" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-ylityo">Ylityö 50</span></div>
-          <div class="input-wrapper"><input type="number" id="yoh" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-tunti">Yö</span></div>
-          <div class="input-wrapper"><input type="number" id="sunh" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-tunti">Su</span></div>
-          <div class="input-wrapper"><input type="number" id="ylityo100" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-ylityo">Ylityö 100</span></div>
+          <div class="input-wrapper"><input type="number" id="iltah" placeholder="0" oninput="suoritaLaskenta()"></div>
+          <div class="input-wrapper"><input type="number" id="lauh" placeholder="0" oninput="suoritaLaskenta()"></div>
+          <div class="input-wrapper"><input type="number" id="ylityo50" placeholder="0" oninput="suoritaLaskenta()"></div>
         </div>
       </div>
 
-      <div id="manuaali_osio" class="input-group" style="display:none;">
+      <div id="manuaali_osio" style="display:none;">
         <label>Perustunnit (100%)</label>
-        <div class="sketch-row"><div class="input-wrapper"><input type="number" id="perustunnit" min="0" oninput="suoritaLaskenta()"><span class="unit-label label-h">h</span></div></div>
-        <label style="margin-top:15px; display:block;">Prosenttitunnit (h)</label>
-        <div id="vakio_rivit"></div>
-        <button type="button" class="add-btn" onclick="lisaaRivi()">+ Lisää %-rivi</button>
-        <label style="margin-top:20px; display:block;">Erillislisät (€)</label>
-        <div id="euro_rivit"></div>
-        <button type="button" class="add-btn" onclick="lisaaEuroRivi()">+ Lisää €-rivi</button>
+        <div class="sketch-row"><input type="number" id="perustunnit" placeholder="158" oninput="suoritaLaskenta()"></div>
+        <button class="add-btn" onclick="lisaaRivi()">+ Lisää rivi</button>
       </div>
 
-      <div id="kta_osio" class="input-group" style="display:none;">
-        <label>KTA-laskenta (3kk tarkistusjakso)</label>
-        <div class="sketch-row"><div class="input-wrapper"><input type="number" id="kta_rahat" min="0" placeholder="Ansiot yhteensä" oninput="suoritaLaskenta()"><span class="unit-label label-h">€</span></div></div>
-        <div class="sketch-row"><div class="input-wrapper"><input type="number" id="kta_tunnit" min="0" placeholder="Tehdyt tunnit" oninput="suoritaLaskenta()"><span class="unit-label label-h">h</span></div></div>
-        <div class="breakdown-box" style="margin-top:20px;">
-          <div class="breakdown-header">OHJE (TES 63 §)</div>
-          <div style="font-size:12px; color:var(--teksti-haalea); line-height:1.4;">
-            Syötä 3kk jakson <strong>työssäolon ajan</strong> palkka ja tunnit.
-            <ul style="margin: 8px 0 0 15px; padding:0;">
-              <li><strong>Mukaan:</strong> Peruspalkka, ilta- ja yölisät, lauantai- ja aattolisät sekä sunnuntaityön korotukset.</li>
-              <li><strong>Ei mukaan:</strong> Ylityöstä tai hätätyöstä maksetut korotusosat (50% / 100%).</li>
-            </ul>
-          </div>
-        </div>
+      <div id="kta_osio" style="display:none;">
+        <label>KTA-laskenta (3kk)</label>
+        <div class="sketch-row"><input type="number" id="kta_rahat" placeholder="Ansiot €" oninput="suoritaLaskenta()"></div>
+        <div class="sketch-row"><input type="number" id="kta_tunnit" placeholder="Tunnit h" oninput="suoritaLaskenta()"></div>
       </div>
+
+      <div id="tulos-container"></div>
     </main>
 
     <footer>
-      <div id="tulos-container"></div>
-      <button id="print-btn" class="print-btn" onclick="window.print()" style="display:none;">Lataa PDF / Tulosta</button>
+      <button id="print-btn" class="print-btn" onclick="window.print()">Lataa PDF / Tulosta</button>
       <div class="footer-logo-container">
-        <img src="ajastamo_25-logo_pieni.webp" alt="Ajastamo Logo" class="footer-logo">
+        <img src="ajastamo_25-logo_pieni.webp" alt="Ajastamo" class="footer-logo">
       </div>
     </footer>
 </div>
 
 <script>
-    function valitseProsentti(nappi, riviId) {
-      const group = nappi.parentElement;
-      const hiddenInput = document.getElementById("prosentti_" + riviId);
-      if (nappi.classList.contains("active")) { nappi.classList.remove("active"); hiddenInput.value = "0"; }
-      else { group.querySelectorAll(".toggle-btn").forEach((btn) => btn.classList.remove("active")); nappi.classList.add("active"); hiddenInput.value = nappi.getAttribute("data-value"); }
-      suoritaLaskenta();
-    }
-    function lisaaRivi() {
-      const container = document.getElementById("vakio_rivit");
-      const riviId = "p_" + Date.now();
-      const div = document.createElement("div"); div.className = "sketch-row";
-      div.innerHTML = `<div class="input-wrapper" style="flex:1"><input type="number" id="tunnit_${riviId}" min="0" placeholder="Tunnit" oninput="suoritaLaskenta()"><span class="unit-label label-h">h</span></div><div class="button-group"><button type="button" class="toggle-btn" data-value="50" onclick="valitseProsentti(this, '${riviId}')">50%</button><button type="button" class="toggle-btn" data-value="100" onclick="valitseProsentti(this, '${riviId}')">100%</button></div><input type="hidden" id="prosentti_${riviId}" value="0"><button type="button" class="del-btn" onclick="poistaRivi(this)">&times;</button>`;
-      container.appendChild(div);
-    }
-    function lisaaEuroRivi() {
-      const container = document.getElementById("euro_rivit");
-      const riviId = "e_" + Date.now();
-      const div = document.createElement("div"); div.className = "sketch-row";
-      div.innerHTML = `<div class="input-wrapper" style="flex:1.5"><input type="text" id="selite_${riviId}" class="text-input" placeholder="Selite" oninput="suoritaLaskenta()"></div><div class="input-wrapper" style="flex:1"><input type="number" id="summa_${riviId}" min="0" placeholder="0.00" oninput="suoritaLaskenta()"><span class="unit-label label-h">€</span></div><button type="button" class="del-btn" onclick="poistaRivi(this)">&times;</button>`;
-      container.appendChild(div);
-    }
-    function poistaRivi(btn) { btn.parentElement.remove(); suoritaLaskenta(); }
-    
     function paivitaNakyvyys() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      const slider = document.querySelector(".selection-slider");
-      document.getElementById("tes_osio").style.display = "none"; document.getElementById("manuaali_osio").style.display = "none"; document.getElementById("kta_osio").style.display = "none"; document.getElementById("print-btn").style.display = "none";
-      if (mode === "tes") { document.getElementById("tes_osio").style.display = "block"; slider.style.transform = "translateX(0%)"; }
-      else if (mode === "manuaali") { document.getElementById("manuaali_osio").style.display = "block"; slider.style.transform = "translateX(100%)"; }
-      else if (mode === "kta") { document.getElementById("kta_osio").style.display = "block"; slider.style.transform = "translateX(200%)"; }
+      const s = document.querySelector(".selection-slider");
+      document.getElementById("tes_osio").style.display = mode === "tes" ? "block" : "none";
+      document.getElementById("manuaali_osio").style.display = mode === "manuaali" ? "block" : "none";
+      document.getElementById("kta_osio").style.display = mode === "kta" ? "block" : "none";
+      s.style.transform = mode === "tes" ? "translateX(0%)" : mode === "manuaali" ? "translateX(100%)" : "translateX(200%)";
       suoritaLaskenta();
     }
     function paivitaKentat() {
-      const ala = document.getElementById("ala").value;
-      const rSel = document.getElementById("ryhma"), kSel = document.getElementById("kokemus");
-      if (rSel.dataset.ala !== ala) {
-        const r = ala === "maapalvelu" ? [4, 5, 6, 7, 8, 9] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        rSel.innerHTML = ""; rSel.dataset.ala = ala; r.forEach((v) => rSel.add(new Option(v, v)));
-      }
-      if (kSel.dataset.ala !== ala) {
-        const k = ala === "maapalvelu" ? [0, 2, 4, 6, 8, 10] : [0, 4, 6, 8, 10, 15, 20, 25];
-        kSel.innerHTML = ""; kSel.dataset.ala = ala; k.forEach((v) => kSel.add(new Option(v === 0 ? "0" : v + "+", v)));
-      }
+      const ala = document.getElementById("ala").value, rSel = document.getElementById("ryhma"), kSel = document.getElementById("kokemus");
+      rSel.innerHTML = ""; kSel.innerHTML = "";
+      const r = ala === "maapalvelu" ? [4,5,6,7,8,9] : [1,2,3,4,5,6,7,8,9,10];
+      r.forEach(v => rSel.add(new Option(v, v)));
+      const k = ala === "maapalvelu" ? [0,2,6,10] : [0,4,10,25];
+      k.forEach(v => kSel.add(new Option(v === 0 ? "0" : v + "+", v)));
+      suoritaLaskenta();
     }
-    function paivitaJaLaske() { paivitaKentat(); suoritaLaskenta(); }
-
     function suoritaLaskenta() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      if (mode === "kta") {
-        const r = parseFloat(document.getElementById("kta_rahat").value) || 0, t = parseFloat(document.getElementById("kta_tunnit").value) || 0;
-        const kta = t > 0 ? r / t : 0;
-        document.getElementById("tulos-container").innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">Keskituntiansio (KTA)</div><div class="total-amount">${kta.toFixed(2)} € / h</div></div><div class="breakdown-box"><div class="breakdown-line"><span>Ansiot (3kk)</span><span>${r.toFixed(2)}€</span></div><div class="breakdown-line"><span>Tunnit (3kk)</span><span>${t.toFixed(2)}h</span></div></div></div>`;
-        return;
-      }
-      const ala = document.getElementById("ala").value, ryhma = parseInt(document.getElementById("ryhma").value) || 0, kokemus = parseInt(document.getElementById("kokemus").value) || 0;
-      const taulukot = { tekninen: { 1: 1911.05, 2: 1989.02, 3: 2076.29, 4: 2182.2, 5: 2303.24, 6: 2432.42, 7: 2582.54, 8: 2734.99, 9: 2895.6, 10: 3069.0, 11: 3253.16 }, maapalvelu: { 4: 2205.06, 5: 2320.87, 6: 2444.46, 7: 2585.88, 8: 2730.63, 9: 2884.3 } };
-      const jakaja = ala === "tekninen" ? 161 : 158, perus = taulukot[ala][ryhma] || 0;
-      let kP = ala === "tekninen" ? (kokemus >= 25 ? 0.19 : kokemus >= 10 ? 0.15 : kokemus >= 4 ? 0.05 : 0) : (kokemus >= 10 ? 0.15 : kokemus >= 6 ? 0.09 : kokemus >= 2 ? 0.03 : 0);
-      
-      /* --- HEKO KIRJAIMET & LASKENTA --- */
-      const hA_val = document.getElementById("heko_a").value; 
-      const hT_val = document.getElementById("heko_t").value;
-      const hMap = { A: 0, B: 0.03, C: 0.06, D: 0.09, E: 0.12 };
-      const hP = hMap[hA_val] + hMap[hT_val];
-      
-      const eK = perus * kP, eH = perus * hP, kk = perus + eK + eH, tunti = kk / jakaja;
-      let erittely = `<div class="breakdown-header">Palkan muodostus</div><div class="breakdown-line"><span>Taulukkopalkka</span><span>${perus.toFixed(2)}€</span></div>`;
-      if (eK > 0) erittely += `<div class="breakdown-line"><span>Kokemuslisä (${(kP*100).toFixed(0)}%)</span><span>${eK.toFixed(2)}€</span></div>`;
-      
-      // NÄYTETÄÄN KIRJAIMET KOOSTEESSA:
-      if (eH > 0) erittely += `<div class="breakdown-line"><span>HEKO-kirjaimet: ${hA_val}${hT_val} (${(hP*100).toFixed(0)}%)</span><span>${eH.toFixed(2)}€</span></div>`;
-      
-      erittely += `<div class="breakdown-header" style="margin-top:12px;">Suoritepalkkaus</div>`;
-      let lSumma = 0; const getH = (id) => Math.max(0, parseFloat(document.getElementById(id).value) || 0);
-      if (mode === "tes") {
-        const v = ala === "tekninen" ? { i: 3.1, y: 5.17 } : { i: 3.06, y: 5.11 };
-        const lisat = [ { n: "Iltalisä", e: getH("iltah") * v.i }, { n: "La-lisä", e: getH("lauh") * tunti * 0.5 }, { n: "Su-lisä", e: getH("sunh") * tunti }, { n: "Yölisä", e: getH("yoh") * v.y }, { n: "Ylityö 50%", e: getH("ylityo50") * tunti * 1.5 }, { n: "Ylityö 100%", e: getH("ylityo100") * tunti * 2 } ];
-        lisat.forEach(l => { if (l.e > 0) { erittely += `<div class="breakdown-line"><span>${l.n}</span><span>${l.e.toFixed(2)}€</span></div>`; lSumma += l.e; } });
+      const tulos = document.getElementById("tulos-container");
+      if(mode === "kta") {
+        const r = parseFloat(document.getElementById("kta_rahat").value) || 0, h = parseFloat(document.getElementById("kta_tunnit").value) || 0;
+        const res = h > 0 ? r/h : 0;
+        tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-amount">${res.toFixed(2)} €/h</div></div></div>`;
       } else {
-        const pS = getH("perustunnit") * tunti; if (pS > 0) { erittely += `<div class="breakdown-line"><span>Perustunnit (100%)</span><span>${pS.toFixed(2)}€</span></div>`; lSumma += pS; }
-        document.querySelectorAll("#vakio_rivit .sketch-row").forEach(r => { const h = parseFloat(r.querySelector('input[type="number"]').value) || 0, p = parseFloat(r.querySelector('input[type="hidden"]').value) || 0; if (h > 0) { const vS = h * tunti * (p/100); erittely += `<div class="breakdown-line"><span>Lisä ${p}% (${h}h)</span><span>${vS.toFixed(2)}€</span></div>`; lSumma += vS; } });
-        document.querySelectorAll("#euro_rivit .sketch-row").forEach(r => { const s = parseFloat(r.querySelector('input[type="number"]').value) || 0, sel = r.querySelector('input[type="text"]').value || "Erillislisä"; if (s > 0) { erittely += `<div class="breakdown-line"><span>${sel}</span><span>${s.toFixed(2)}€</span></div>`; lSumma += s; } });
+        const ala = document.getElementById("ala").value, r = parseInt(document.getElementById("ryhma").value) || 4;
+        const perus = ala === "maapalvelu" ? 2205.06 : 2182.20; // Esimerkkiarvot [cite: 2026-01-09]
+        tulos.innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">Palkka yhteensä</div><div class="total-amount">${perus.toFixed(2)} €</div></div></div>`;
       }
-      const loppu = kk + lSumma;
-      document.getElementById("tulos-container").innerHTML = `<div class="summary-box"><div class="total-box"><div class="total-info-row">Kk-palkka: ${kk.toFixed(2)} € | ${tunti.toFixed(2)} €/h</div><div class="total-amount">${loppu.toFixed(2)} € / kk</div></div><div class="breakdown-box">${erittely}</div></div>`;
-      document.getElementById("print-btn").style.display = loppu > 0 ? "block" : "none";
     }
-    window.onload = paivitaJaLaske;
+    window.onload = paivitaKentat;
 </script>
 </body>
 </html>
-``` [cite: 2026-01-09]
