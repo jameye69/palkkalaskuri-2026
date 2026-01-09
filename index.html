@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palkkalaskuri 2026</title>
     <style>
+        /* --- TYYLIT --- */
         :root {
             --sivun-tausta: #f2f2f7; --kortin-tausta: #ffffff; --nappi-vari: #1c497b; --nappi-teksti: #ffffff;
             --summa-vari: #151515; --tuntipalkka-vari: #151515; --teksti-paa: #151515; --teksti-haalea: #8e8e93;
@@ -17,43 +18,67 @@
         .app-card { background: var(--kortin-tausta); width: 440px; min-width: 440px; border-radius: 20px; padding: 32px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); }
         header { text-align: center; margin-bottom: 30px; }
         label { display: block; margin-bottom: 8px; font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .main-row-layout { display: flex; gap: 8px; }
-        .field.flex-grow { width: 40% !important; }
-        .field:nth-child(2) { width: 28% !important; }
-        .field:nth-child(3) { width: 29% !important; }
+        .main-row-layout, .input-row { display: flex; gap: 8px; }
+        .field.flex-grow { width: 40% !important; flex: none !important; }
+        .field:nth-child(2) { width: 28% !important; flex: none !important; }
+        .field:nth-child(3) { width: 29% !important; flex: none !important; }
         .input-wrapper { position: relative; height: 48px; }
-        input, select { width: 100%; height: 48px; border: 1px solid var(--reuna-viiva); border-radius: 10px; background: var(--kentta-tausta); padding: 0 10px; }
+        input, select { width: 100%; height: 48px; border: 1px solid var(--reuna-viiva); border-radius: 10px; background: var(--kentta-tausta); padding: 0 10px; font-size: 14px; }
         .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; opacity: 0.5; pointer-events: none; }
-        .label-pr { left: 32px; } .label-vuotta { left: 44px; }
-        .total-amount { font-size: 30px; font-weight: 800; text-align: center; margin-top: 10px; }
+        .label-pr { left: 32px; } .label-vuotta { left: 44px; } .label-amha, .label-typa { left: 63px; }
+        .label-tunti { left: 36px; } .label-ylityo { left: 40px; }
+        .summary-box { background: var(--kentta-tausta); border: 1px solid var(--jakaja-viiva); border-radius: 16px; padding: 16px; margin-top: 15px; }
+        .total-box { text-align: center; border-bottom: 1px solid var(--jakaja-viiva); padding-bottom: 12px; }
+        .total-amount { font-size: 30px; font-weight: 800; color: var(--summa-vari); }
+        .breakdown-box { padding-top: 12px; }
+        .breakdown-line { display: flex; justify-content: space-between; font-size: 11px; color: var(--teksti-haalea); margin-bottom: 4px; }
+        .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin-bottom: 25px; }
+        .segmented-control label { flex: 1; text-align: center; padding: 12px 0; font-size: 13px; font-weight: 600; color: var(--kytkin-teksti); cursor: pointer; z-index: 1; position: relative; }
+        .selection-slider { position: absolute; top: 2px; left: 2px; width: calc(33.33% - 2px); height: calc(100% - 4px); background: var(--painonappi-vari); border-radius: 10px; transition: transform 0.2s; }
+        .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .footer-logo-container { text-align: center; margin-top: 25px; }
         .footer-logo { max-width: 140px; height: auto; margin: 0 auto; display: block; }
         .print-btn { width: 100%; margin-top: 20px; padding: 16px; background: var(--nappi-vari); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin-bottom: 20px; }
-        .segmented-control label { flex: 1; text-align: center; padding: 10px 0; margin: 0; cursor: pointer; z-index: 1; }
-        .selection-slider { position: absolute; top: 2px; left: 2px; width: calc(33.33% - 2px); height: calc(100% - 4px); background: var(--painonappi-vari); border-radius: 10px; transition: 0.2s; }
+        #manuaali_osio, #kta_osio { display: none; }
     </style>
 </head>
 <body>
 <div class="app-card">
     <header>
-        <h1>Palkkalaskuri 2026</h1>
+        <h1 style="font-size: 20px; margin-bottom: 5px;">Palkkalaskuri 2026</h1>
         <div class="segmented-control">
-            <input type="radio" name="m" id="t" checked><label for="t">Taulukko</label>
-            <input type="radio" name="m" id="a"><label for="a">Arvio</label>
-            <input type="radio" name="m" id="k"><label for="k">KTA</label>
-            <div class="selection-slider"></div>
+            <input type="radio" name="mode" id="m-tes" value="tes" checked onchange="vaihda()"><label for="m-tes">Taulukko</label>
+            <input type="radio" name="mode" id="m-arv" value="man"><label for="m-arv">Arvio</label>
+            <input type="radio" name="mode" id="m-kta" value="kta"><label for="m-kta">KTA</label>
+            <div class="selection-slider" id="slider"></div>
         </div>
     </header>
     <main>
-        <div class="input-group">
-            <div class="main-row-layout">
-                <div class="field flex-grow"><label>SOPIMUSALA</label><select><option>Maapalvelut</option></select></div>
-                <div class="field"><label>Palkkaryhmä</label><div class="input-wrapper"><select><option>4</option></select><span class="unit-label label-pr">PR</span></div></div>
-                <div class="field"><label>Palvelusaika</label><div class="input-wrapper"><select><option>2+</option></select><span class="unit-label label-vuotta">Vuotta</span></div></div>
+        <div id="asetukset">
+            <div class="input-group">
+                <div class="main-row-layout">
+                    <div class="field flex-grow"><label>SOPIMUSALA</label><select id="ala" onchange="laske()"><option value="maapalvelu">Maapalvelut</option><option value="tekninen">Tekniset</option></select></div>
+                    <div class="field"><label>PR</label><div class="input-wrapper"><select id="ryhma" onchange="laske()"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select><span class="unit-label label-pr">PR</span></div></div>
+                    <div class="field"><label>KOKEMUS</label><div class="input-wrapper"><select id="kok" onchange="laske()"><option value="0">0</option><option value="2">2+</option><option value="6">6+</option><option value="10">10+</option></select><span class="unit-label label-vuotta">Vuotta</span></div></div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>HEKO OSTA</label>
+                <div class="input-row">
+                    <div class="input-wrapper"><select id="heko_a" onchange="laske()"><option value="0.03">B 3%</option><option value="0.06">C 6%</option></select><span class="unit-label label-amha">AMHA</span></div>
+                    <div class="input-wrapper"><select id="heko_t" onchange="laske()"><option value="0.03">B 3%</option><option value="0.06">C 6%</option></select><span class="unit-label label-typa">TYPA</span></div>
+                </div>
             </div>
         </div>
-        <div class="total-amount">2337.36 €</div>
+        <div id="tes_osio">
+            <label>Tunnit (h)</label>
+            <div class="grid-inputs">
+                <div class="input-wrapper"><input type="number" id="ilt" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">Ilta</span></div>
+                <div class="input-wrapper"><input type="number" id="lau" placeholder="0" oninput="laske()"><span class="unit-label label-tunti">La</span></div>
+                <div class="input-wrapper"><input type="number" id="yl50" placeholder="0" oninput="laske()"><span class="unit-label label-ylityo">Yli 50</span></div>
+            </div>
+        </div>
+        <div id="tulos-container"></div>
     </main>
     <footer>
         <button class="print-btn" onclick="window.print()">Lataa PDF / Tulosta</button>
@@ -63,7 +88,46 @@
     </footer>
 </div>
 <script>
-    // Tähän tulee aiemmin tehty JS-logiikka. Testataan ensin visuaalinen puoli.
+    function vaihda() {
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        const s = document.getElementById("slider");
+        if(mode === "tes") s.style.transform = "translateX(0%)";
+        else if(mode === "man") s.style.transform = "translateX(100%)";
+        else s.style.transform = "translateX(200%)";
+        laske();
+    }
+    function laske() {
+        const ala = document.getElementById("ala").value;
+        const r = parseInt(document.getElementById("ryhma").value);
+        const k = parseInt(document.getElementById("kok").value);
+        const ha = parseFloat(document.getElementById("heko_a").value);
+        const ht = parseFloat(document.getElementById("heko_t").value);
+        
+        const taul = {maapalvelu:{4:2205.06,5:2320.87,6:2444.46,7:2585.88,8:2730.63,9:2884.3}};
+        const perus = taul.maapalvelu[r] || 2205.06;
+        const kokLisa = perus * (k >= 10 ? 0.15 : k >= 6 ? 0.09 : k >= 2 ? 0.03 : 0);
+        const heko = perus * (ha + ht);
+        const kk = perus + kokLisa + heko;
+        const tunti = kk / 158;
+
+        const ilt = (parseFloat(document.getElementById("ilt").value) || 0) * 3.06;
+        const lau = (parseFloat(document.getElementById("lau").value) || 0) * tunti * 0.5;
+        const yl = (parseFloat(document.getElementById("yl50").value) || 0) * tunti * 1.5;
+        const loppu = kk + ilt + lau + yl;
+
+        document.getElementById("tulos-container").innerHTML = `
+            <div class="summary-box">
+                <div class="total-box">
+                    <div class="total-info-row">${tunti.toFixed(2)} €/h</div>
+                    <div class="total-amount">${loppu.toFixed(2)} €</div>
+                </div>
+                <div class="breakdown-box">
+                    <div class="breakdown-line"><span>Kk-palkka</span><span>${kk.toFixed(2)}€</span></div>
+                    <div class="breakdown-line"><span>Lisät yhteensä</span><span>${(ilt+lau+yl).toFixed(2)}€</span></div>
+                </div>
+            </div>`;
+    }
+    laske();
 </script>
 </body>
 </html>
