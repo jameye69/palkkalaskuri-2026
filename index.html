@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palkkalaskuri 2026</title>
+    <style>
+        :root {
+            --sivun-tausta: #f2f2f7; --kortin-tausta: #ffffff; --nappi-vari: #1c497b; --nappi-teksti: #ffffff;
+            --summa-vari: #151515; --tuntipalkka-vari: #151515; --teksti-paa: #151515; --teksti-haalea: #8e8e93;
+            --reuna-viiva: #d1d1d6; --kentta-tausta: #fcfcfd; --jakaja-viiva: #f2f2f7; --kytkin-pohja: #e3e3e8;
+            --kytkin-teksti: #636366; --painonappi-vari: #1c497b; --suffix-opacity: 0.45;
+        }
+        * { box-sizing: border-box; }
+        body { background-color: var(--sivun-tausta); font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; padding: 20px; color: var(--teksti-paa); }
+        input[type="radio"] { display: none !important; }
+        .app-card { background: var(--kortin-tausta); width: 440px; min-width: 440px; border-radius: 20px; padding: 32px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); }
+        header { text-align: center; margin-bottom: 30px; }
+        label { display: block; margin-bottom: 8px; font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .main-row-layout { display: flex; gap: 8px; }
+        .field.flex-grow { width: 40% !important; }
+        .field:nth-child(2) { width: 28% !important; }
+        .field:nth-child(3) { width: 29% !important; }
+        .input-wrapper { position: relative; height: 48px; }
+        input, select { width: 100%; height: 48px; border: 1px solid var(--reuna-viiva); border-radius: 10px; background: var(--kentta-tausta); padding: 0 10px; }
+        .unit-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; opacity: 0.5; pointer-events: none; }
+        .label-pr { left: 32px; } .label-vuotta { left: 44px; }
+        .total-amount { font-size: 30px; font-weight: 800; text-align: center; margin-top: 10px; }
+        .footer-logo-container { text-align: center; margin-top: 25px; }
+        .footer-logo { max-width: 140px; height: auto; margin: 0 auto; display: block; }
+        .print-btn { width: 100%; margin-top: 20px; padding: 16px; background: var(--nappi-vari); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .segmented-control { position: relative; display: flex; background: var(--kytkin-pohja); padding: 2px; border-radius: 12px; margin-bottom: 20px; }
+        .segmented-control label { flex: 1; text-align: center; padding: 10px 0; margin: 0; cursor: pointer; z-index: 1; }
+        .selection-slider { position: absolute; top: 2px; left: 2px; width: calc(33.33% - 2px); height: calc(100% - 4px); background: var(--painonappi-vari); border-radius: 10px; transition: 0.2s; }
+    </style>
+</head>
+<body>
+<div class="app-card">
+    <header>
+        <h1>Palkkalaskuri 2026</h1>
+        <div class="segmented-control">
+            <input type="radio" name="m" id="t" checked><label for="t">Taulukko</label>
+            <input type="radio" name="m" id="a"><label for="a">Arvio</label>
+            <input type="radio" name="m" id="k"><label for="k">KTA</label>
+            <div class="selection-slider"></div>
+        </div>
+    </header>
+    <main>
+        <div class="input-group">
+            <div class="main-row-layout">
+                <div class="field flex-grow"><label>SOPIMUSALA</label><select><option>Maapalvelut</option></select></div>
+                <div class="field"><label>Palkkaryhmä</label><div class="input-wrapper"><select><option>4</option></select><span class="unit-label label-pr">PR</span></div></div>
+                <div class="field"><label>Palvelusaika</label><div class="input-wrapper"><select><option>2+</option></select><span class="unit-label label-vuotta">Vuotta</span></div></div>
+            </div>
+        </div>
+        <div class="total-amount">2337.36 €</div>
+    </main>
+    <footer>
+        <button class="print-btn" onclick="window.print()">Lataa PDF / Tulosta</button>
+        <div class="footer-logo-container">
+            <img src="ajastamo_25-logo_pieni.webp" alt="Ajastamo Logo" class="footer-logo">
+        </div>
+    </footer>
+</div>
+<script>
+    // Tähän tulee aiemmin tehty JS-logiikka. Testataan ensin visuaalinen puoli.
+</script>
+</body>
+</html>
